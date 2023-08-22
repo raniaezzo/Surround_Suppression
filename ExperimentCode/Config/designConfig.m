@@ -14,7 +14,7 @@ function [expDes]=designConfig(scr,const)
 % ----------------------------------------------------------------------
 
 % save random number generator / seed for each run
-expDes.rng = rng(const.run);
+expDes.rng = rng(const.block);
 
 %% Experimental sequence
 

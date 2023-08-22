@@ -32,7 +32,13 @@ function main(const)
 
 % Main part :
 if const.expStart;ListenChar(2);end
-[responses, trial_onsets] = runTrials(scr,const,expDes,my_key,textExp);
+tic
+%[responses, trial_onsets] = runTrials(scr,const,expDes,my_key,textExp);
+
+if const.DEBUG ==1 % can delete later (just for testing)
+    responses = []; 
+    trial_onsets = [];
+end
 
 % End
 overDone(const, responses, trial_onsets)

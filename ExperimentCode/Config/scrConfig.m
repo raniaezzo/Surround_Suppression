@@ -42,8 +42,7 @@ params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 
 % save other params to const struct
-const.stimOri = params.stimOri; const.stimEcc = params.stimEcc; 
-const.surrGap = params.surrGap; 
+const.stimOri = params.stimOri; const.surrGap = params.surrGap; 
 
 % parse contrast list from tsv file
 contrasts = extractBetween(params.targetContrast{1}, '[',']');
@@ -78,6 +77,9 @@ scr.scrY_px = resolution.height;
 scr.scrPixelDepth_bpp = resolution.pixelSize; % bits per pixel
 
 [scr.windX_px, scr.windY_px]=Screen('WindowSize', scr.scr_num);
+
+% load in eccentricity values and convert to pixels
+const.stimEcc = params.stimEcc; const.stimEccpix = vaDeg2pix(const.stimEcc, scr); 
 
 if const.miniWindow == 1 || const.DEBUG == 1
     %PsychDebugWindowConfiguration(0, 0.5)

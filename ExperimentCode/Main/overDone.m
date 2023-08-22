@@ -12,9 +12,9 @@ function overDone(const, responses, trial_onsets)
 % none
 % ----------------------------------------------------------------------
 
-fid = fopen(const.runLog, 'a');
+fid = fopen(const.blockLog, 'a');
 fprintf(fid, '\n')
-fprintf(fid, 'Run%i', const.run)
+fprintf(fid, 'Block%i', const.block)
 
 % .mat file
 save(const.responses_fileMat,'responses');

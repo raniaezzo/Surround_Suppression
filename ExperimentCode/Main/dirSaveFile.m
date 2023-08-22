@@ -27,7 +27,7 @@ const.blockLog = fullfile(datadir,const.subjID, 'blocklog.txt');
 
 if ~isfile(const.blockLog)
     mkdir(const.subjDir);
-    const.run = 1;
+    const.block = 1;
 else
     fid = fopen(const.blockLog, 'r');
     blocks = fscanf(fid, '%s');
@@ -40,12 +40,12 @@ const.blockDir = fullfile(const.subjDir, sprintf('Block%i', const.block));
 mkdir(const.blockDir);
 
 % Defines saving file names
-const.scr_fileDat =     fullfile(const.blockDir, sprintf('S%s_scr_file_Block%i.dat',const.subjID, const.run));
-const.scr_fileMat =     fullfile(const.blockDir, sprintf('S%s_scr_file_Block%i.mat',const.subjID, const.run));
-const.const_fileDat =   fullfile(const.blockDir, sprintf('S%s_const_file_Block%i.dat',const.subjID, const.run));
-const.const_fileMat =   fullfile(const.blockDir, sprintf('S%s_const_file_Block%i.mat',const.subjID, const.run));
-const.expRes_fileCsv =  fullfile(const.blockDir, sprintf('S%s_expRes_Block%i.csv',const.subjID, const.run));
-const.design_fileMat =  fullfile(const.blockDir, sprintf('S%s_design_Block%i.mat',const.subjID, const.run));
-const.responses_fileMat =  fullfile(const.blockDir, sprintf('S%s_responses_Block%i.mat',const.subjID, const.run));
+const.scr_fileDat =     fullfile(const.blockDir, sprintf('S%s_scr_file_Block%i.dat',const.subjID, const.block));
+const.scr_fileMat =     fullfile(const.blockDir, sprintf('S%s_scr_file_Block%i.mat',const.subjID, const.block));
+const.const_fileDat =   fullfile(const.blockDir, sprintf('S%s_const_file_Block%i.dat',const.subjID, const.block));
+const.const_fileMat =   fullfile(const.blockDir, sprintf('S%s_const_file_Block%i.mat',const.subjID, const.block));
+const.expRes_fileCsv =  fullfile(const.blockDir, sprintf('S%s_expRes_Block%i.csv',const.subjID, const.block));
+const.design_fileMat =  fullfile(const.blockDir, sprintf('S%s_design_Block%i.mat',const.subjID, const.block));
+const.responses_fileMat =  fullfile(const.blockDir, sprintf('S%s_responses_Block%i.mat',const.subjID, const.block));
 
 end

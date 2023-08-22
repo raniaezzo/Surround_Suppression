@@ -13,7 +13,7 @@ KbName('UnifyKeyNames')
 
 % Initialization
 warning('off');        % do not print warnings
-const.DEBUG = 0;       % skips subject details / data saving
+const.DEBUG = 1;       % skips subject details / data saving
 const.miniWindow = 0;  % for debugging purposes only
 
 % Try to find correct path:
