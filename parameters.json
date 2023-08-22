@@ -1,0 +1,32 @@
+
+{
+    "scrDist": {
+        "LongName": "Screen Distance",
+        "Description": "Distance between the screen center and the eye.",
+        "Units": "centimeters"
+    },
+    "stimOri": {
+        "LongName": "Stimulus Orientation",
+        "Description": "Orientation of the stimulus (0 is horizontal and values move counterclockwise).",
+        "Units": "degrees"
+    },
+    "stimEcc": {
+        "LongName": "Stimulus Eccentricity",
+        "Description": "Distance from the center of thre screen to the center of the stimulus.",
+        "Units": "degrees of visual angle"
+    },
+    "surrGap": {
+        "LongName": "Surround Gap",
+        "Description": "Gap between the center and surround boundaries",
+        "Units": "degrees of visual angle"
+    },
+    "targetContrast": {
+        "LongName": "Target Contrast",
+        "Levels": {
+            "0.2": "20 % contrast",
+            "0.5": "50 % contrast"
+        }
+        "Units": "percent / 100"
+    }
+}
+
