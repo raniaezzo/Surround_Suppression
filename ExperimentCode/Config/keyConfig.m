@@ -17,6 +17,7 @@ function [my_key]=keyConfig(const)
 for i=1:length(productNames)                  % for each possible devices
     if strcmp(productNames{i},const.keyboard) % compare the name to the name you want
         my_key.keyboardID=keyboardIndices(i); % grab the correct id, and exit loop
+        disp('DETECTED KEYBOARD PROVIDED')
     else 
         my_key.keyboardID=keyboardIndices(1); % otherwise use first keyboard detected
     end

@@ -27,7 +27,7 @@ const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
 % stimulus size:
-stimSize = round(scr.windY_px/6);
+stimSize = round(scr.windY_px/10);
 const.stimRadius_xpix = stimSize; % constrain X by Y
 const.stimRadius_ypix = stimSize;
 const.stimRadius_deg =  pix2vaDeg(const.stimRadius_xpix,scr);
@@ -76,11 +76,11 @@ const.expStart = 0;
 
 %% PTB orientation/direction conversion
 % 
-% orientationids = 0:45:315; ptborientation = {90, 45, 0, 135, 90, 45, 0, 135};
-% const.maporientation = containers.Map(orientationids,ptborientation);
-% 
-% directionids = 0:45:315; ptbdirection = {180, 135, 90, 45, 0, 315, 270, 225};
-% const.mapdirection = containers.Map(directionids,ptbdirection);
+orientationids = 0:45:315; ptborientation = {90, 45, 0, 135, 90, 45, 0, 135};
+const.maporientation = containers.Map(orientationids,ptborientation);
+ 
+directionids = 0:45:315; ptbdirection = {180, 135, 90, 45, 0, 315, 270, 225};
+const.mapdirection = containers.Map(directionids,ptbdirection);
 
 %% Saving procedure :
 
@@ -125,6 +125,9 @@ function mask = create_cosRamp(gratingtex, rampSize)
             end
         end
     end
+    
+    mask = 1-mask;
+    
 end
 
 

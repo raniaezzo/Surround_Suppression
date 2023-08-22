@@ -23,6 +23,7 @@ const.text_font = 'Helvetica';
 const.white =    [ 1,  1,  1];
 const.gray =    [ .5,  .5,  .5];
 const.black =   [  0,   0,   0];
+const.lightgray =   [  0.75,   0.75,   0.75 ];
 
 % Time
 const.my_clock_ini = clock;

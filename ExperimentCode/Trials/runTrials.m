@@ -33,7 +33,6 @@ FlushEvents('KeyDown');
 %% Main Loop
 frameCounter=1;
 const.expStop = 0;
-paddingX = 0;
 
 tic
 vbl = Screen('Flip',const.window);
@@ -43,6 +42,7 @@ trial_onsets = nan(1,(expDes.nb_trials));
 while ~const.expStop
     
     for ni=1:expDes.nb_trials
+        disp('NEW TRIAL')
         trial_onsets(ni) = vbl-t0; % log the onset of each
         [task, frameCounter, vbl] = my_stim(my_key, scr,const,expDes,task, frameCounter,ni,vbl);
     end

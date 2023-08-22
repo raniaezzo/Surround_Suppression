@@ -7,7 +7,7 @@ try
 
     % Blank period
     while vbl <= vblendtime  
-
+        disp('in blank period')
         if task(frameCounter,1)==1
             fixColor = const.lightgray;
         else
@@ -21,18 +21,17 @@ try
 
         % check for keyboard input
         [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
-        if ~keyIsDown
-            [keyIsDown, ~, keyCode] = KbCheck(my_key.suppResponseID);
-        end
         if keyIsDown && keyCode(my_key.escape)
             ShowCursor; sca; return
-        elseif keyIsDown && ~keyCode(my_key.escape) && ~(keyCode(my_key.Trigger) || keyCode(34))
+        elseif keyIsDown && ~keyCode(my_key.escape)
             task(frameCounter,2) = 1;   
         end
 
         FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
     end
+    
+    disp('finished response')
     
 catch
     return
