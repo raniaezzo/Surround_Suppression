@@ -37,7 +37,6 @@ while ~push_button
     
     addi = 0;
     for t_lines = 1:sizeT(1)
-        Screen('DrawTexture', const.window, const.pinknoiseTex); % just added
         Screen('DrawText',const.window,text{t_lines,:},x_mid-bound(3)/2,first_line+addi*espace, const.white);
         addi = addi+1;
     end
@@ -48,34 +47,14 @@ while ~push_button
     % wait for trigger with keyboard (keep with VPIXX for ability to quit)
     [ keyIsDown, ~, keyCode ] = KbCheck(my_key.keyboardID); % KbCheck(-1);
     if keyIsDown
-        disp('KEYCODE IS')
-        disp(keyCode)
-        if keyCode(my_key.Trigger) || keyCode(34)
-            disp('TRIGGERED!')
+        if keyCode(my_key.space)
+            disp('STARTED EXPERIMENT ...')
             push_button=1;
         elseif keyCode(my_key.escape) && ~const.expStart
             return
         end
     end
-    
-    if const.vpixx == 1
-        % wait for trigger from datapixx
-        Datapixx('RegWrRd');
-        init_check = dec2bin(Datapixx('GetDinValues'));
-        trigger_state = init_check(14);
-        while 1
-            Datapixx('RegWrRd');
-            regcheck = dec2bin(Datapixx('GetDinValues'));
-            if regcheck(14) ~= trigger_state
-                push_button=1;
-                disp('TRIGGERED!')
-                break;
-            end
-        end
-    end
 
 end
-
-% keyPressed = find(keyCode);
 
 end

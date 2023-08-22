@@ -41,6 +41,15 @@ params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 
+% save other params to const struct
+const.stimOri = params.stimOri; const.stimEcc = params.stimEcc; 
+const.surrGap = params.surrGap; 
+
+% parse contrast list from tsv file
+contrasts = extractBetween(params.targetContrast{1}, '[',']');
+contrasts = strsplit(contrasts{1},',');
+const.targetContrast = arrayfun(@(x) str2double(contrasts{x}),1:length(contrasts));
+
 % find screen details
 if ~computerDetails.windows
     switch computerDetails.localHostName

@@ -14,11 +14,8 @@ function [textExp] = instructionConfig
 
 %% Main instruction :
 
-eyeinstruction = '-------------  Prepare for eyetracking (T)  -------------';
+instruction = '-----------------  Ready to start? [space]  -----------------';
 
-instruction = '-----------------  Waiting for trigger (T)  -----------------';
-
-textExp.eyeinstruction= {eyeinstruction};
 textExp.instruction= {instruction};
 
 end

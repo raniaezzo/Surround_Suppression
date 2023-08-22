@@ -26,6 +26,9 @@ const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
+% LEFT OFF HERE: scale the stimulus based on eccentricity?
+
+
 % stimulus size: full field
 const.stimRadius_xpix = round(scr.windY_px/2 * scr.maxDiam_percent); % constrain X by Y
 const.stimRadius_ypix = round(scr.windY_px/2 * scr.maxDiam_percent);

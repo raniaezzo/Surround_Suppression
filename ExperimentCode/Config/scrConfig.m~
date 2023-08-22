@@ -10,6 +10,7 @@ function [scr, const]=scrConfig(const)
 % ----------------------------------------------------------------------
 % Output(s):
 % scr : struct containing all screen configuration.
+% const strcut containing some additional params
 % ----------------------------------------------------------------------
 
 %% General
@@ -39,6 +40,15 @@ filepath = fullfile(const.mainDir, 'parameters.tsv');
 params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
+
+% save other params to const struct
+const.stimOri = params.stimOri; const.stimEcc = params.stimEcc; 
+const.surrGap = params.surrGap; 
+contrasts = extractBetween(params.targetContrast{1}, '[',']');
+contrasts = strsplit(contrasts{1},',');
+c1 = arrayfun(@(x) mean(contrasts.f1),S)
+str2num(contrasts{1})
+const.targetContrast = params.targetContrast; 
 
 % find screen details
 if ~computerDetails.windows
@@ -116,7 +126,7 @@ Screen('BlendFunction', const.window, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 topPriorityLevel = MaxPriority(const.window);
 Priority(topPriorityLevel);
 
-% save .mat file with screen parameters used fo
+% save .mat file with screen parameters used
 save(const.scr_fileMat,'scr');
 
 end
