@@ -21,7 +21,10 @@ function [task, trial_onsets] = runTrials(scr,const,expDes,my_key,textExp)
 
 disp('Starting runTrials')
 
-HideCursor(scr.scr_num);
+if const.DEBUG
+    HideCursor(scr.scr_num);
+end
+
 keyCode = instructions(scr,const,my_key,textExp.instruction);
 
 task = my_task(expDes, scr);

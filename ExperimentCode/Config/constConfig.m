@@ -27,17 +27,13 @@ const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
 % stimulus size:
-stimSize = round(scr.windY_px/10);
+stimSize = const.stimRadiuspix; %round(scr.windY_px/10); %const.stimRadiuspix*2; %
 const.stimRadius_xpix = stimSize; % constrain X by Y
 const.stimRadius_ypix = stimSize;
-const.stimRadius_deg =  pix2vaDeg(const.stimRadius_xpix,scr);
 
 % 
 const.stimCosEdge_deg = 1; %1.5;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
-
-% stimulus location
-const.stimCenterEcc_deg = const.stimEcc;
 
 % fixed stimulus contrast
 const.contrast = .5;
@@ -62,17 +58,7 @@ const.gratingtex=Screen('MakeTexture', const.window, gratingtex);
 %%
 % prepare input for stimulus
 const.phaseLine = rand(1, expDes.nb_trials) .* 360;
-% const.aspectRatio = 1;
-% const.gaussianSigma = 0;
 
-%% Fixation Properties
-
-%const.fixationRadius_deg = 0.1;
-%const.fixationRadius_px = vaDeg2pix(const.fixationRadius_deg,scr);
-const.fixationRadius_px = 0.03*const.stimRadius_ypix;
-const.fixationRadius_deg = pix2vaDeg(const.fixationRadius_px, scr);
-
-const.expStart = 0;
 
 %% PTB orientation/direction conversion
 % 
@@ -83,6 +69,8 @@ directionids = 0:45:315; ptbdirection = {180, 135, 90, 45, 0, 315, 270, 225};
 const.mapdirection = containers.Map(directionids,ptbdirection);
 
 %% Saving procedure :
+
+const.expStart = 0;
 
 % .mat file
 save(const.const_fileMat,'const');

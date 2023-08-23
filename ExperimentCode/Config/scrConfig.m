@@ -81,9 +81,9 @@ scr.scrPixelDepth_bpp = resolution.pixelSize; % bits per pixel
 [scr.windX_px, scr.windY_px]=Screen('WindowSize', scr.scr_num);
 
 % load in eccentricity values and convert to pixels
-const.stimEcc = params.stimEcc; const.stimEccpix = vaDeg2pix(const.stimEcc, scr); 
-const.stimRadius = params.stimRadius; const.stimRadiuspix = vaDeg2pix(params.stimRadius, scr); 
-const.surroundRadius = params.surroundRadius; const.surroundRadiuspix = vaDeg2pix(const.surroundRadius, scr);
+const.stimEcc_deg = params.stimEcc; const.stimEccpix = vaDeg2pix(const.stimEcc_deg, scr); 
+const.stimRadius_deg = params.stimRadius; const.stimRadiuspix = vaDeg2pix(const.stimRadius_deg, scr); 
+const.surroundRadius_deg = params.surroundRadius; const.surroundRadiuspix = vaDeg2pix(const.surroundRadius_deg, scr);
 const.gapRatio = params.gapRatio;
 
 if const.miniWindow == 1 || const.DEBUG == 1
@@ -120,14 +120,25 @@ if scale2screen % this is mainly for testing
     disp('and setting eccentricity to maximize stimulus range..')
     
     const.stimEccpix = scr.windX_px/4;
+    const.stimEcc_deg = pix2vaDeg(const.stimEccpix, scr);
     
     radiusConstraints = [scr.windX_px/2, scr.windY_px/2];
     minConstraint = min(radiusConstraints);
     
     scalingFactor = minConstraint/const.surroundRadiuspix;
     const.surroundRadiuspix = minConstraint;
-    const.stimRadius = const.stimRadius*scalingFactor;
+    const.surroundRadius_deg = pix2vaDeg(const.surroundRadiuspix, scr);
+    const.stimRadiuspix = const.stimRadiuspix*scalingFactor;
+    const.stimRadius_deg = pix2vaDeg(const.stimRadiuspix, scr);
 end
+
+
+%% Fixation Properties
+
+const.fixationRadius_px = 0.01*scr.windY_px;
+const.fixationRadius_deg = pix2vaDeg(const.fixationRadius_px, scr);
+
+%%
 
 
 PsychDefaultSetup(2); % assert OpenGL, setup unifiedkeys and unit color range
