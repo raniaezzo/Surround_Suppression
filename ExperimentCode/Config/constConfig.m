@@ -42,7 +42,8 @@ x = meshgrid(-const.grating_halfw:const.grating_halfw + const.stimSF_ppc, 1);
 signal=0.5 + 0.5.*cos(const.stimSF_radians*x);
 signal = signal.*0.5+0.25; % new
 gratingtex = repmat(signal, [length(signal),1]);
-gratingmask = create_cosRamp(gratingtex, const.stimCosEdge_pix);
+distance_fromRadius = 0;
+gratingmask = create_cosRamp(gratingtex, distance_fromRadius, const.stimCosEdge_pix);
 gratingtex(:,:,2) = gratingmask;
 const.gratingtex=Screen('MakeTexture', const.window, gratingtex);
 
@@ -58,8 +59,11 @@ x = meshgrid(-const.surround_halfw:const.surround_halfw + const.stimSF_ppc, 1);
 signal=0.5 + 0.5.*cos(const.stimSF_radians*x);
 signal = signal.*0.5+0.25; % new
 surroundtex = repmat(signal, [length(signal),1]);
-surroundmask = create_cosRamp(surroundtex, const.stimCosEdge_pix);
-surroundmask2 = create_cosRamp2(surroundtex, surroundmask, const.surround2GapRadiusPix, const.stimCosEdge_pix);
+distance_fromRadius = 0;
+surroundmask = create_cosRamp(surroundtex, distance_fromRadius, const.stimCosEdge_pix);
+
+distance_fromRadius = const.surround2GapRadiusPix;
+surroundmask2 = create_cosRamp(surroundmask, distance_fromRadius, const.stimCosEdge_pix);
 surroundtex(:,:,2) = surroundmask2;
 const.surroundtex=Screen('MakeTexture', const.window, surroundtex);
 

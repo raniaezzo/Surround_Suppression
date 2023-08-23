@@ -1,21 +1,17 @@
-function mask = create_cosRamp(gratingtex, rampSize)
-
-%     gratingtex = surroundmask;
-%     const.stimCosEdge_deg = 1; %1.5;
-%     const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
-% 
-%     rampSize = const.stimCosEdge_pix;
+function mask = create_cosRamp(gratingtex, distance_fromRadius, rampSize)
 
     [~,imsize] = size(gratingtex);
     
-    filterparam = (imsize-1) / 2; %filterparam = stimSize;     %imsize = filterparam*2+1;
-%     filterparam = round(const.surround2GapRadiusPix);
+    filterparam = ((imsize-1) / 2) - round(distance_fromRadius);
     
-
     [xN, yN] = meshgrid(-imsize/2+0.5:imsize/2-0.5, -imsize/2+0.5:imsize/2-0.5);
     [~, r] = cart2pol(xN,yN);
 
-    mask = zeros(imsize,imsize);
+    if round(distance_fromRadius) == 0
+        mask = zeros(imsize,imsize); %
+    else 
+        mask = gratingtex;
+    end
 
     inner_radius = filterparam - rampSize;
     outer_radius = filterparam;
@@ -36,13 +32,18 @@ function mask = create_cosRamp(gratingtex, rampSize)
                 pick = (dist - minR) / (maxR - minR) *1000;
                 choose = round(pick);
                 mask(ii,jj) = cosY(choose+1);
-                %alpha(ii,jj) = (1-cosd(r(ii,jj)-inner_radius))/2;
             else
-                mask(ii,jj) = 1;
+                if round(distance_fromRadius) == 0
+                    mask(ii,jj) = 1; %%
+                else
+                    mask(ii,jj) = mask(ii,jj); %%
+                end
             end
         end
     end
     
-    mask = 1-mask;
+    if round(distance_fromRadius) == 0
+        mask = 1-mask; %%
+    end
     
 end
