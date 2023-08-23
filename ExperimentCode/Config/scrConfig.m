@@ -27,7 +27,8 @@ const.lightgray =   [  0.75,   0.75,   0.75 ];
 
 % Time
 const.my_clock_ini = clock;
-
+scale2screen = 0;
+    
 %% Screen
 computerDetails = Screen('Computer');  % check computer specs
 
@@ -43,7 +44,7 @@ params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 
 % save other params to const struct
-const.stimOri = params.stimOri; const.surrGap = params.surrGap; 
+const.stimOri = params.stimOri; const.gapRatio = params.gapRatio; 
 
 % parse contrast list from tsv file
 contrasts = extractBetween(params.targetContrast{1}, '[',']');
@@ -81,6 +82,9 @@ scr.scrPixelDepth_bpp = resolution.pixelSize; % bits per pixel
 
 % load in eccentricity values and convert to pixels
 const.stimEcc = params.stimEcc; const.stimEccpix = vaDeg2pix(const.stimEcc, scr); 
+const.stimRadius = params.stimRadius; const.stimRadiuspix = vaDeg2pix(params.stimRadius, scr); 
+const.surroundRadius = params.surroundRadius; const.surroundRadiuspix = vaDeg2pix(const.surroundRadius, scr);
+const.gapRatio = params.gapRatio;
 
 if const.miniWindow == 1 || const.DEBUG == 1
     %PsychDebugWindowConfiguration(0, 0.5)
@@ -95,6 +99,36 @@ else
     scr.windY_px = scr.windY_px;
     scr_dim = []; % PTB says better precision when empty
 end
+
+% check if lawful parameter size relative to screen
+if const.surroundRadiuspix >= const.stimEccpix
+    disp('Surround radius must NOT exceed stimulus eccentricity.')
+    scale2screen = 1;
+end
+if const.surroundRadiuspix >= scr.windY_px/2
+    disp('Surround radius must NOT exceed half the screen height.')
+    scale2screen = 1;
+end
+if const.surroundRadiuspix+const.stimEccpix >= scr.windX_px/2
+    disp('Surround radius + eccentricity must NOT exceed the screen width.')
+    scale2screen = 1;
+end
+%
+
+if scale2screen % this is mainly for testing
+    disp('Scaling params to fit current window..')
+    disp('and setting eccentricity to maximize stimulus range..')
+    
+    const.stimEccpix = scr.windX_px/4;
+    
+    radiusConstraints = [scr.windX_px/2, scr.windY_px/2];
+    minConstraint = min(radiusConstraints);
+    
+    scalingFactor = minConstraint/const.surroundRadiuspix;
+    const.surroundRadiuspix = minConstraint;
+    const.stimRadius = const.stimRadius*scalingFactor;
+end
+
 
 PsychDefaultSetup(2); % assert OpenGL, setup unifiedkeys and unit color range
 PsychImaging('PrepareConfiguration'); % First step in starting pipeline

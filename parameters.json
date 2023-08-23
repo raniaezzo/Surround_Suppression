@@ -12,13 +12,23 @@
     },
     "stimEcc": {
         "LongName": "Stimulus Eccentricity",
-        "Description": "Distance from the center of thre screen to the center of the stimulus.",
+        "Description": "Distance from the center of the screen to the center of the stimulus.",
         "Units": "degrees of visual angle"
     },
-    "surrGap": {
-        "LongName": "Surround Gap",
-        "Description": "Gap between the center and surround boundaries",
+    "stimRadius": {
+        "LongName": "Stimulus Radius",
+        "Description": "Radius of the isolated stimulus and center stimulus.",
         "Units": "degrees of visual angle"
+    },
+    "surroundRadius": {
+        "LongName": "Surround Radius",
+        "Description": "Radius of the surround stimulus.",
+        "Units": "degrees of visual angle"
+    },
+    "gapRatio": {
+        "LongName": "gapRatio",
+        "Description": "Ratio of the surroundRadius that is used for a gap.",
+        "Units": "percent / 100"
     },
     "targetContrast": {
         "LongName": "Target Contrast",

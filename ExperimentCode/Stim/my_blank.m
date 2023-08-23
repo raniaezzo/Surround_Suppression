@@ -7,7 +7,6 @@ try
 
     % Blank period
     while vbl <= vblendtime  
-        disp('in blank period')
         if task(frameCounter,1)==1
             fixColor = const.lightgray;
         else

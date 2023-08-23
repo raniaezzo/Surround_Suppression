@@ -19,7 +19,11 @@ gratingtex = const.gratingtex;
 xDist = const.stimEccpix; yDist = 0;
 xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
 yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
-dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
+dstRect_R=[xDist yDist visiblesize+xDist visiblesize+yDist];
+
+xDist2 = -const.stimEccpix;
+xDist2 = scr.windCenter_px(1)+xDist2-(visiblesize/2); % center + (+- distance added in pixels)
+dstRect_L=[xDist2 yDist visiblesize+(xDist2) visiblesize+yDist];
 
 % % properties matrix
 % propertiesMat = [const.phaseLine(1), const.stimSF_cpp, ...
@@ -35,7 +39,6 @@ vblendtime = vbl + movieDurationSecs;
 
 % Animationloop:
 while (vbl < vblendtime)
-    disp('in stimulus period')
 
     if task(frameCounter,1)==1
         fixColor = const.lightgray;
@@ -56,7 +59,10 @@ while (vbl < vblendtime)
     %Screen('BlendFunction', const.window, 'GL_ONE', 'GL_ZERO');
 
     % Draw grating texture, rotated by "angle":
-    Screen('DrawTexture', const.window, gratingtex, [], dstRect, const.maporientation(const.stimOri), ...
+    Screen('DrawTexture', const.window, gratingtex, [], dstRect_R, const.maporientation(const.stimOri), ...
+        [], [], [], [], []); %, propertiesMat');
+    
+    Screen('DrawTexture', const.window, gratingtex, [], dstRect_L, const.maporientation(const.stimOri), ...
         [], [], [], [], []); %, propertiesMat');
 
 %         % outer and inner masks
@@ -82,8 +88,6 @@ while (vbl < vblendtime)
     frameCounter=frameCounter+1;
 
 end
-
-disp('finished stimulus')
 
 % shared code for baseline & also intertrial interval
 [task, frameCounter, vbl] = my_blank(my_key, scr,const, task, frameCounter, expDes.itiDur_s*1, vbl);
