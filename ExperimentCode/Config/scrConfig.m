@@ -122,7 +122,7 @@ if scale2screen % this is mainly for testing
     const.stimEccpix = scr.windX_px/4;
     const.stimEcc_deg = pix2vaDeg(const.stimEccpix, scr);
     
-    radiusConstraints = [scr.windX_px/2, scr.windY_px/2];
+    radiusConstraints = [scr.windX_px/2, scr.windY_px/2, const.stimEccpix];
     minConstraint = min(radiusConstraints);
     
     scalingFactor = minConstraint/const.surroundRadiuspix;

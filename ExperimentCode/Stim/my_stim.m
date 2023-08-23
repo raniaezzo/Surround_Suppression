@@ -7,23 +7,16 @@ trialType = expDes.trialMat(trialID,2); % contrast value
 movieDurationSecs=expDes.stimDur_s;   % Abort after 0.5 seconds.
 i = const.phaseLine(trialID);
 
-% included: ~~~~~
-% 
-%     grating_halfw = const.grating_halfw;
-visiblesize = const.visiblesize;
-gratingtex = const.gratingtex;
-%     maskOutertex = const.maskOutertex;
-%     maskInnertex = const.maskInnertex;
+gratingtex = const.gratingtex; visiblesize = const.visiblesize;
+surroundtex = const.surroundtex; visiblesize_surr = const.visiblesize_surr;
 
 % eccentricity
 xDist = const.stimEccpix; yDist = 0;
-xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
-yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
-dstRect_R=[xDist yDist visiblesize+xDist visiblesize+yDist];
 
-xDist2 = -const.stimEccpix;
-xDist2 = scr.windCenter_px(1)+xDist2-(visiblesize/2); % center + (+- distance added in pixels)
-dstRect_L=[xDist2 yDist visiblesize+(xDist2) visiblesize+yDist];
+dstRect_R = create_dstRect(visiblesize, xDist, yDist, scr, 1); % right side
+dstRect_L = create_dstRect(visiblesize, xDist, yDist, scr, 0); % left side
+
+dstRect_surround_L = create_dstRect(visiblesize_surr, xDist, yDist, scr, 0); % left side
 
 % % properties matrix
 % propertiesMat = [const.phaseLine(1), const.stimSF_cpp, ...
@@ -64,6 +57,11 @@ while (vbl < vblendtime)
     
     Screen('DrawTexture', const.window, gratingtex, [], dstRect_L, const.maporientation(const.stimOri), ...
         [], [], [], [], []); %, propertiesMat');
+    
+    Screen('DrawTexture', const.window, surroundtex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
+        [], [], [], [], []); %, propertiesMat');
+    
+    
 
 %         % outer and inner masks
 %         Screen('DrawTexture', const.window, maskOutertex, [], [], []); %[0 0 scr.windX_px scr.windY_px], []);
@@ -92,10 +90,16 @@ end
 % shared code for baseline & also intertrial interval
 [task, frameCounter, vbl] = my_blank(my_key, scr,const, task, frameCounter, expDes.itiDur_s*1, vbl);
     
-    
-%     
-% catch
-%     return
-% end
+
+%%
+
+function dstRect = create_dstRect(visiblesize, xDist, yDist, scr, rightside)
+    if rightside
+        xDist = -xDist;
+    end
+    xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
+    yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
+    dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
+end
 
 end
