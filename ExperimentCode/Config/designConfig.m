@@ -30,7 +30,7 @@ for i=1:numel(expDes.locations)
 end
 
 trialsequenceMAT = repmat(expDes.mainStimTypes, expDes.nb_repeat, 1);
-trialsequenceMAT = expDes.mainStimTypes(randperm(length(expDes.mainStimTypes)), :);
+trialsequenceMAT = trialsequenceMAT(randperm(length(trialsequenceMAT)), :);
 
 [expDes.nb_trials, ~] = size(trialsequenceMAT);
 
@@ -43,7 +43,7 @@ expDes.trialMat = [trialIDs', trialsequenceMAT];
 %% Experiental timing settings
 
 expDes.stimDur_s  = 10;   % 0.5 sec stimulus duration
-expDes.itiDur_s  = 2;      % 2 inter-trial interval
+expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
 expDes.total_s = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s));
 
 expDes.stimDur_nFrames  =     round(expDes.stimDur_s/scr.ifi); % # frames
