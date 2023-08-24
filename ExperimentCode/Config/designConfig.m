@@ -18,23 +18,27 @@ expDes.rng = rng(const.block);
 
 %% Experimental sequence
 
-expDes.nb_repeat = 4; % number of repeats
+expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
 
-% randomize the unique trials expDes.nb_repeat Xs, then concatenate for
-% full run
-trialtypesMAT = const.targetContrast'; trialsequenceMAT = [];
-for tt=1:expDes.nb_repeat
-    trialsequenceMAT = [trialsequenceMAT; trialtypesMAT(randperm(size(trialtypesMAT,1)), :)];
+expDes.locations = [0 180]'; 
+expDes.contrasts = const.targetContrast';
+
+expDes.mainStimTypes = [];
+for i=1:numel(expDes.locations)
+    tmp = [expDes.contrasts, ones(length(expDes.contrasts),1)*expDes.locations(i)];
+    expDes.mainStimTypes = [expDes.mainStimTypes; tmp];
 end
 
-% save attributes
-trialsequence = array2table(trialsequenceMAT,'VariableNames',{'targetContrasts'});
-expDes.mainStimTypes = unique(trialsequence.targetContrasts);
-[expDes.nb_trials, ~] = size(trialsequence);
+trialsequenceMAT = repmat(expDes.mainStimTypes, expDes.nb_repeat, 1);
+trialsequenceMAT = expDes.mainStimTypes(randperm(length(expDes.mainStimTypes)), :);
+
+[expDes.nb_trials, ~] = size(trialsequenceMAT);
+
+expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'targetContrasts', 'horizontalLoc'});
 
 % Experimental matrix
 trialIDs = 1:expDes.nb_trials;
-expDes.trialMat = [trialIDs', table2array(trialsequence)];
+expDes.trialMat = [trialIDs', trialsequenceMAT];
 
 %% Experiental timing settings
 

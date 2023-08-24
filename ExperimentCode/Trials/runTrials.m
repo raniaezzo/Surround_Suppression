@@ -1,4 +1,4 @@
-function [task, trial_onsets] = runTrials(scr,const,expDes,my_key,textExp)
+function [expDes, const] = runTrials(scr,const,expDes,my_key,textExp)
 % ----------------------------------------------------------------------
 % runTrials(scr,const,expDes,my_key,textExp,button)
 % ----------------------------------------------------------------------
@@ -19,15 +19,15 @@ function [task, trial_onsets] = runTrials(scr,const,expDes,my_key,textExp)
 
 %% General instructions:
 
-disp('Starting runTrials')
-
 if const.DEBUG
     HideCursor(scr.scr_num);
 end
 
 keyCode = instructions(scr,const,my_key,textExp.instruction);
+tic
 
-task = my_task(expDes, scr);
+% cols: contrast, RT
+expDes.task = nan(expDes.nb_trials, 2);
 
 if keyCode(my_key.escape), return, end
 
@@ -36,22 +36,23 @@ FlushEvents('KeyDown');
 %% Main Loop
 frameCounter=1;
 const.expStop = 0;
+const.forceQuit = 0;
 
-tic
 vbl = Screen('Flip',const.window);
 t0=vbl;
-trial_onsets = nan(1,(expDes.nb_trials));
+expDes.trial_onsets = nan(1,(expDes.nb_trials));
+expDes.stimulus_onsets = nan(1,(expDes.nb_trials));
 
 while ~const.expStop
     
     for ni=1:expDes.nb_trials
-        disp('NEW TRIAL')
-        trial_onsets(ni) = vbl-t0; % log the onset of each
-        [task, frameCounter, vbl] = my_stim(my_key, scr,const,expDes,task, frameCounter,ni,vbl);
+        expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
+        [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
+        expDes.stimulus_onsets(ni) = vbl-t0; % log the onset of each stimulus
+        [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, ni, vbl);
     end
     
 end
-toc
 
 
 end

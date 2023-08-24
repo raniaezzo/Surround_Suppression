@@ -1,4 +1,4 @@
-function overDone(const, responses, trial_onsets)
+function overDone(const, expDes)
 % ----------------------------------------------------------------------
 % overDone
 % ----------------------------------------------------------------------
@@ -13,14 +13,15 @@ function overDone(const, responses, trial_onsets)
 % ----------------------------------------------------------------------
 
 fid = fopen(const.blockLog, 'a');
-fprintf(fid, '\n')
-fprintf(fid, 'Block%i', const.block)
+fprintf(fid, '\n');
+fprintf(fid, 'Block%i', const.block);
 
 % .mat file
-save(const.responses_fileMat,'responses');
+save(const.design_fileMat,'expDes');
+save(const.const_fileMat, 'const');
 
-timestamp_path = strrep(const.responses_fileMat,'responses', 'timestamps');
-save(timestamp_path,'trial_onsets');
+% timestamp_path = strrep(const.responses_fileMat,'responses', 'timestamps');
+% save(timestamp_path,'trial_onsets');
 
 %figure
 %plot(responses(1:length(responses)/4))
