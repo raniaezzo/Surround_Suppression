@@ -160,6 +160,21 @@ scr.vbl = Screen('Flip', const.window);
 % Query the frame duration
 scr.ifi = Screen('GetFlipInterval', const.window);
 
+%% load in gamma table for appropriate contrast
+if ~const.DEBUG
+    gammaVals = load(const.gammaTablePath);
+    const.gammaVals = gammaVals.gamma;
+    [~, const.calibSuccess] = Screen('LoadNormalizedGammaTable', const.window, const.gammaVals.*[1 1 1]);
+    if const.calibSuccess
+        disp('Successfully incorporated the gamma table from the config folder.')
+        disp('NOTE: if this gamma table was not re-created for your setup, please replace file.')
+    else
+        disp('Calibration of screen color/contrast values failed.')
+    end
+end
+
+%%
+
 % Enable alpha-blending, set it to a blend equation useable for linear
 % additive superposition. This allows to linearly
 % superimpose gabor patches in the mathematically correct manner, should
@@ -168,7 +183,8 @@ scr.ifi = Screen('GetFlipInterval', const.window);
 % the drawn patch before it is superimposed to the framebuffer image, ie.,
 % it allows to specify a global per-patch contrast value:
 %Screen('BlendFunction', const.window, GL_ONE, GL_ONE);
-Screen('BlendFunction', const.window, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+%Screen('BlendFunction', const.window, GL_SRC_ALPHA,
+%GL_ONE_MINUS_SRC_ALPHA); % put back
 
 % Set drawing to maximum priority level
 topPriorityLevel = MaxPriority(const.window);

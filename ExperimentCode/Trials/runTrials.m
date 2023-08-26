@@ -42,16 +42,17 @@ vbl = Screen('Flip',const.window);
 t0=vbl;
 expDes.trial_onsets = nan(1,(expDes.nb_trials));
 expDes.stimulus_onsets = nan(1,(expDes.nb_trials));
-
-while ~const.expStop
     
-    for ni=1:expDes.nb_trials
+for ni=1:expDes.nb_trials
+    
+    fprintf('TRIAL %i ... ', ni)
+
+    if ~const.expStop
         expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
         [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
         expDes.stimulus_onsets(ni) = vbl-t0; % log the onset of each stimulus
         [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, ni, vbl);
     end
-    
 end
 
 

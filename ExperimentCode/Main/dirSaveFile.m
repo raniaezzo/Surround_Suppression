@@ -25,6 +25,9 @@ datadir = fullfile(MainDirectory, 'Data');
 const.subjDir = fullfile(datadir,const.subjID);
 const.blockLog = fullfile(datadir,const.subjID, 'blocklog.txt');
 
+% this saves path, the values are loaded in later (in scrConfig)
+const.gammaTablePath = fullfile(MainDirectory, 'ExperimentCode', 'Config', 'gamma.mat');
+
 if ~isfile(const.blockLog)
     mkdir(const.subjDir);
     const.block = 1;

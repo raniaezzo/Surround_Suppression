@@ -8,7 +8,7 @@ try
     % Blank period
     while vbl <= vblendtime  
         
-        if const.expStop==0
+        if ~const.expStop
 
             % draw stimuli here, better at the start of the drawing loop
             my_fixation(scr,const,const.black)

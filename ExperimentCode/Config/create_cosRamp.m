@@ -42,7 +42,7 @@ function mask = create_cosRamp(gratingtex, distance_fromRadius, rampSize)
         end
     end
     
-    if round(distance_fromRadius) == 0
+    if round(distance_fromRadius) ~= 0 % changed (reversed)
         mask = 1-mask; %%
     end
     
