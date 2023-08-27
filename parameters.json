@@ -27,7 +27,7 @@
     },
     "gapRatio": {
         "LongName": "gapRatio",
-        "Description": "Ratio of the surroundRadius that is used for a gap.",
+        "Description": "Ratio of the surroundRadius that is used for a gap. Note that the width of the cosine ramp used for soft edges also affects the appearance of the gap slightly  - const.stimCosEdge_deg",
         "Units": "percent / 100"
     },
     "targetContrast": {

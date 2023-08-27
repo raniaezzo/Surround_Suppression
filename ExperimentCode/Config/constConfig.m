@@ -26,7 +26,7 @@ const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
-const.stimCosEdge_deg = 0.5 ; %1.5;
+const.stimCosEdge_deg = 0.5; %0.5 ; %1.5;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
 % fixed stimulus contrast
