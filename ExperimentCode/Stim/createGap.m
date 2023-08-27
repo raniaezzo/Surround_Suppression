@@ -59,4 +59,4 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
 %     outerror
 %     disp('inner error')
 %     inerror
-       end
+         end
