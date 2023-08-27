@@ -9,7 +9,7 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
     outerEdgeRadius_high = outerEdgeRadius + rampSize
     
     % initialize mask
-    mask = zeros(imsize,imsize).*1;
+    mask = zeros(imsize,imsize);
     
     [xN, yN] = meshgrid(-imsize/2+0.5:imsize/2-0.5, -imsize/2+0.5:imsize/2-0.5);
     [~, r] = cart2pol(xN,yN);
@@ -26,25 +26,37 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
     test = test(test > innerEdgeRadius_low-innerEdgeRadius_low);
     maxRi = max(test); minRi  = min(test);
     
+%     outerror = 0;
+    
     % Loop through each pixel in the image
-       for ii = 1:imsize
+      for ii = 1:imsize
         for jj = 1:imsize
-            if (r(ii,jj) > innerEdgeRadius_high) && (r(ii,jj) < outerEdgeRadius_low)
+            if (r(ii,jj) >= innerEdgeRadius_high) && (r(ii,jj) <= outerEdgeRadius_low)
                 mask(ii,jj) = 1;
-            elseif (r(ii,jj) <= innerEdgeRadius_high) && (r(ii,jj) >= innerEdgeRadius_low)
+            elseif (r(ii,jj) < innerEdgeRadius_high) && (r(ii,jj) > innerEdgeRadius_low)
                 dist = r(ii,jj)-innerEdgeRadius_low;
                 pick = (dist - minRi) / (maxRi - minRi) *1000;
                 choose = round(pick);
                 mask(ii,jj) = cosY(choose+1);
-            elseif (r(ii,jj) <= outerEdgeRadius_high) && (r(ii,jj) >= outerEdgeRadius_low)
+            elseif (r(ii,jj) < outerEdgeRadius_high) && (r(ii,jj) > outerEdgeRadius_low)
                 dist = r(ii,jj)-outerEdgeRadius_low;
                 pick = (dist - minRo) / (maxRo - minRo) *1000;
                 choose = round(pick);
-                mask(ii,jj) = 1-cosY(choose+1);
+%                 try
+                    mask(ii,jj) = 1-cosY(choose+1);
+%                 catch
+%                     mask(ii,jj) = 1-cosY(end);
+%                     disp('OUTERFIX')
+%                     dist
+%                     outerror = outerror+1;
+%                 end
             else
                 mask(ii,jj) = 0;
             end
-        end
-    end
-            
-end
+         end
+      end
+%     disp('outter error')
+%     outerror
+%     disp('inner error')
+%     inerror
+  end

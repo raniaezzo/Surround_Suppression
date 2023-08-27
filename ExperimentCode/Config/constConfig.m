@@ -26,7 +26,7 @@ const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
-const.stimCosEdge_deg = 0.5; %1.5;
+const.stimCosEdge_deg = 0.5 ; %1.5;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
 % fixed stimulus contrast
@@ -39,7 +39,7 @@ const.contrast_surround = 0.8;
 
 % STIMULUS
 const.grating_halfw= const.stimRadiuspix;
-const.visiblesize=2*const.grating_halfw+1;
+const.visiblesize=2*floor(const.grating_halfw)+1;
 
 % center grating
 const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesize, const.visiblesize, [.5 .5 .5  0], const.visiblesize/2, 1);
@@ -61,7 +61,7 @@ const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
 
 % SURROUND
 const.surround_halfw= const.surroundRadiuspix;
-const.visiblesize_surr=2*const.surround_halfw+1;
+const.visiblesize_surr=2*floor(const.surround_halfw)+1;
 
 % surround grating
 const.surroundwavetex = CreateProceduralSineGrating(const.window, const.visiblesize_surr, const.visiblesize_surr, [.5 .5 .5  0], const.visiblesize_surr/2, 1);
@@ -74,17 +74,6 @@ maskSurr = ones(length(x),length(x)).*0.5;
 % this is the outer ramp
 disp('creating outer ramp of surround')
 [surroundmask, ~] = create_cosRamp(maskSurr, distance_fromRadius, const.stimCosEdge_pix, 1, [], []); 
-
-% then create the inner target ramp ?????????????????????
-% distance_fromRadius = 0; %length(surroundmask)/2-const.stimRadiuspix; %const.nonTargetRadiuspix;
-% disp('creating outer ramp of embedded target')
-% [surroundmask2, ~] = create_cosRamp(surroundmask, distance_fromRadius, const.stimCosEdge_pix, 0, [], filterparam); % 0 to account for previous mask
-
-% then create the ramp for surround-to-gap
-%distance_fromRadius = const.surround2GapRadiusPix; %const.gap_pxfromBoundary; %const.nonTargetRadiuspix; %
-%[surroundmask3, ~]  = create_cosRamp(surroundmask2, distance_fromRadius, const.stimCosEdge_pix, 0, 'outer2inner', []); % 0 to account for previous mask
-
-%maskSurr(:,:,2) = surroundmask3;
 maskSurr(:,:,2) = surroundmask;  
 
 const.surroundmask=Screen('MakeTexture', const.window, maskSurr);
@@ -92,9 +81,14 @@ const.surroundmask=Screen('MakeTexture', const.window, maskSurr);
 %% GAP
 % add a solid circle to mask for surround gap
 const.gapRadius_px = round(const.stimRadiuspix+((const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio));
+%const.gapRadius_px = round((const.visiblesize+((const.visiblesize_surr-const.visiblesize)*const.gapRatio))/2);
 
-gap = ones(length(x),length(x)).*0.5;
-gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix);
+%const.gapRadius_px
+%const.surroundRadiuspix
+
+%gap = ones(length(x),length(x)).*0.5;
+gap = ones(const.visiblesize_surr, const.visiblesize_surr).*0.5;
+gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix); %const.surroundwavetex
 const.gapTexture=Screen('MakeTexture', const.window, gap);
 
 % TO DO
