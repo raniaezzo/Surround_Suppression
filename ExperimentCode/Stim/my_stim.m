@@ -6,7 +6,7 @@ iR = const.phaseLine(2,trialID);
 iS = const.phaseLine(3,trialID);
 
 gratingtex = const.squarewavetex; visiblesize = const.visiblesize;
-surroundtex = const.surroundtex; visiblesize_surr = const.visiblesize_surr;
+surroundtex = const.surroundwavetex; visiblesize_surr = const.visiblesize_surr;
 
 % determine location of the Sm (isolated) and St (embedded)
 testContrast = expDes.trialMat(trialID,2); % contrast value
@@ -51,6 +51,15 @@ while (vbl < vblendtime)
         % Set the right blend function for drawing the gabors
         Screen('BlendFunction', const.window, 'GL_ONE', 'GL_ZERO');
         
+        % surround
+        if testLocation == 0
+           Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
+               [], [], [], [], [], [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0]);
+        elseif testLocation == 180
+           Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
+               [], [], [], [], [], [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0]);
+        end
+        
         %if phasenow - should i just present counterphase this way?
         % Draw grating texture, rotated by "angle":
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_R, const.maporientation(const.stimOri), ...
@@ -60,20 +69,18 @@ while (vbl < vblendtime)
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_L, const.maporientation(const.stimOri), ...
             [], [], [], [], [], [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0]);
        
+        % add grey gradient masks
         Screen('BlendFunction', const.window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
         
-        Screen('DrawTexture', const.window, const.centermask, [], dstRect_R, [], [], [], [], [], []);
-        
-        Screen('DrawTexture', const.window, const.centermask, [], dstRect_L, [], [], [], [], [], []);
-
-        % surround
-        %if testLocation == 0
-        %    Screen('DrawTexture', const.window, surroundtex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
-        %        [], const.contrast_surround, [], [], []); %, propertiesMat');
-        %elseif testLocation == 180
-        %    Screen('DrawTexture', const.window, surroundtex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
-        %        [], const.contrast_ surround, [], [], []); %, propertiesMat');
-        %end
+        if testLocation == 0
+            Screen('DrawTexture', const.window, const.centermask, [], dstRect_L, [], [], [], [], [], []);
+            Screen('DrawTexture', const.window, const.surroundmask, [], dstRect_surround_R, [], [], [], [], [], []);
+            Screen('DrawTexture', const.window, const.gapTexture, [], dstRect_surround_R, [], [], [], [], [], []);
+        elseif testLocation == 180
+            Screen('DrawTexture', const.window, const.centermask, [], dstRect_R, [], [], [], [], [], []);
+            Screen('DrawTexture', const.window, const.surroundmask, [], dstRect_surround_L, [], [], [], [], [], []);
+            Screen('DrawTexture', const.window, const.gapTexture, [], dstRect_surround_L, [], [], [], [], [], []);
+        end
 
         % Draw stimuli here, better at the start of the drawing loop
         my_fixation(scr,const,const.black)

@@ -26,12 +26,14 @@ const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
-const.stimCosEdge_deg = 1; %1.5;
+const.stimCosEdge_deg = 0.5; %1.5;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
 % fixed stimulus contrast
 const.contrast = .5;
 const.contrast_surround = 0.8;
+
+%% CENTER GRATING W/ RAMP
 
 % Initialize displaying of grating (to save time for initial build):
 
@@ -39,16 +41,6 @@ const.contrast_surround = 0.8;
 const.grating_halfw= const.stimRadiuspix;
 const.visiblesize=2*const.grating_halfw+1;
 
-% x = meshgrid(-const.grating_halfw:const.grating_halfw + const.stimSF_ppc, 1);
-% signal=cos(const.stimSF_radians*x);
-% signal = (signal - min(signal)) / ( max(signal) - min(signal) ); % normalize from 0-1
-% gratingtex = repmat(signal, [length(signal),1]);
-% distance_fromRadius = 0;
-% gratingmask = create_cosRamp(gratingtex, distance_fromRadius, const.stimCosEdge_pix);
-% gratingtex(:,:,2) = gratingmask;
-% const.gratingtex=Screen('MakeTexture', const.window, gratingtex);
-
-%% CENTER GRATING W/ RAMP
 % center grating
 const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesize, const.visiblesize, [.5 .5 .5  0], const.visiblesize/2, 1);
 %const.gratingtex=Screen('DrawTexture', const.window, squarewavetex);
@@ -57,34 +49,61 @@ const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesiz
 distance_fromRadius = 0;
 x = meshgrid(-const.grating_halfw:const.grating_halfw + const.stimSF_ppc, 1);
 mask = ones(length(x),length(x)).*0.5;
-mask(:,:,2) = create_cosRamp(mask, distance_fromRadius, const.stimCosEdge_pix);
+[mask(:,:,2), filterparam] = create_cosRamp(mask, distance_fromRadius, const.stimCosEdge_pix, 1, [], []); % 1 for initialize mask
 const.centermask=Screen('MakeTexture', const.window, mask);
 
+%% SURROUND GRATING X/ RAMP
 
 % calculate the amount of area of surround exclusing target
 const.nonTargetRadiuspix = const.surroundRadiuspix - const.stimRadiuspix;
-const.surround2GapRadiusPix = const.nonTargetRadiuspix*(1-const.gapRatio);
+const.surround2GapRadiusPix = const.nonTargetRadiuspix*(const.gapRatio); % outer boundary of the gap
+const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
 
 % SURROUND
 const.surround_halfw= const.surroundRadiuspix;
 const.visiblesize_surr=2*const.surround_halfw+1;
 
-x = meshgrid(-const.surround_halfw:const.surround_halfw + const.stimSF_ppc, 1);
-signal=cos(const.stimSF_radians*x);
-signal = (signal - min(signal)) / ( max(signal) - min(signal) ); % normalize from 0-1
-surroundtex = repmat(signal, [length(signal),1]);
-distance_fromRadius = 0;
-surroundmask = create_cosRamp(surroundtex, distance_fromRadius, const.stimCosEdge_pix);
+% surround grating
+const.surroundwavetex = CreateProceduralSineGrating(const.window, const.visiblesize_surr, const.visiblesize_surr, [.5 .5 .5  0], const.visiblesize_surr/2, 1);
 
-distance_fromRadius = const.surround2GapRadiusPix;
-surroundmask2 = create_cosRamp(surroundmask, distance_fromRadius, const.stimCosEdge_pix);
-surroundtex(:,:,2) = surroundmask2;
-const.surroundtex=Screen('MakeTexture', const.window, surroundtex);
+% initialize gray background mask
+distance_fromRadius = 0;
+x = meshgrid(-const.surround_halfw:const.surround_halfw + const.stimSF_ppc, 1);
+maskSurr = ones(length(x),length(x)).*0.5;
+
+% this is the outer ramp
+disp('creating outer ramp of surround')
+[surroundmask, ~] = create_cosRamp(maskSurr, distance_fromRadius, const.stimCosEdge_pix, 1, [], []); 
+
+% then create the inner target ramp ?????????????????????
+% distance_fromRadius = 0; %length(surroundmask)/2-const.stimRadiuspix; %const.nonTargetRadiuspix;
+% disp('creating outer ramp of embedded target')
+% [surroundmask2, ~] = create_cosRamp(surroundmask, distance_fromRadius, const.stimCosEdge_pix, 0, [], filterparam); % 0 to account for previous mask
+
+% then create the ramp for surround-to-gap
+%distance_fromRadius = const.surround2GapRadiusPix; %const.gap_pxfromBoundary; %const.nonTargetRadiuspix; %
+%[surroundmask3, ~]  = create_cosRamp(surroundmask2, distance_fromRadius, const.stimCosEdge_pix, 0, 'outer2inner', []); % 0 to account for previous mask
+
+%maskSurr(:,:,2) = surroundmask3;
+maskSurr(:,:,2) = surroundmask;  
+
+const.surroundmask=Screen('MakeTexture', const.window, maskSurr);
+
+%% GAP
+% add a solid circle to mask for surround gap
+const.gapRadius_px = round(const.stimRadiuspix+((const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio));
+
+gap = ones(length(x),length(x)).*0.5;
+gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix);
+const.gapTexture=Screen('MakeTexture', const.window, gap);
+
+% TO DO
+% even if there is no gap (0), still make this the cosine ramp.
 
 
 %%
 % prepare input for stimulus
-const.phaseLine = rand(3, expDes.nb_trials) .* 360;
+      const.phaseLine = rand(3, expDes.nb_trials) .* 360;
 
 
 %% PTB orientation/direction conversion

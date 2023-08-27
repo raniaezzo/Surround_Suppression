@@ -132,6 +132,12 @@ if scale2screen % this is mainly for testing
     const.stimRadius_deg = pix2vaDeg(const.stimRadiuspix, scr);
 end
 
+if ~((const.gapRatio >= 0) && (const.gapRatio <= 1))
+    disp('Gap ratio must be between 0 and 1..')
+    disp('Setting to default value of 0.5')
+    const.gapRatio = 0.5;
+end
+
 
 %% Fixation Properties
 
