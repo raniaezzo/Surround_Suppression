@@ -23,6 +23,8 @@ expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
 expDes.locations = [0 180]'; 
 expDes.contrasts = const.targetContrast';
 
+expDes.stimulus = 'grating'; %'perlinNoise'; % or grating
+
 expDes.mainStimTypes = [];
 for i=1:numel(expDes.locations)
     tmp = [expDes.contrasts, ones(length(expDes.contrasts),1)*expDes.locations(i)];
@@ -39,6 +41,9 @@ expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'target
 % Experimental matrix
 trialIDs = 1:expDes.nb_trials;
 expDes.trialMat = [trialIDs', trialsequenceMAT];
+
+% starting contrasts
+expDes.startingContrasts = ones(1, expDes.nb_trials)*0.1; %rand(1,expDes.nb_trials);
 
 %% Experiental timing settings
 

@@ -31,7 +31,7 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
     % Loop through each pixel in the image
       for ii = 1:imsize
         for jj = 1:imsize
-            if (r(ii,jj) > innerEdgeRadius_high) && (r(ii,jj) < outerEdgeRadius_low)
+            if (r(ii,jj) >= innerEdgeRadius_high) && (r(ii,jj) <= outerEdgeRadius_low)
                 mask(ii,jj) = 1;
             elseif (r(ii,jj) < innerEdgeRadius_high) && (r(ii,jj) > innerEdgeRadius_low)
                 dist = r(ii,jj)-innerEdgeRadius_low;
@@ -59,4 +59,4 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
 %     outerror
 %     disp('inner error')
 %     inerror
-         end
+          end

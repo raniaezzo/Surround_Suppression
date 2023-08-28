@@ -21,12 +21,6 @@ dstRect_L = create_dstRect(visiblesize, xDist, yDist, scr, 0); % left side
 dstRect_surround_R = create_dstRect(visiblesize_surr, xDist, yDist, scr, 1); % right side
 dstRect_surround_L = create_dstRect(visiblesize_surr, xDist, yDist, scr, 0); % left side
 
-if testLocation == 0 % right
-    contrast_R = testContrast; contrast_L = 0.8;
-elseif testLocation == 180 % left
-    contrast_R = 0.8; contrast_L = testContrast;
-end
-
 waitframes = 1;
 waitduration = waitframes * scr.ifi;
 shiftperframe= const.stimSpeed_cps * const.stimSpeed_ppc * waitduration;
@@ -37,9 +31,12 @@ vblendtime = vbl + movieDurationSecs;
 flicker_time = movieDurationSecs/(movieDurationSecs*4); % 4 hz  
 increment = flicker_time; 
 flipphase = -1; phasenow = 1;
+const.responded=0;
+adjustedContrast = expDes.startingContrasts(1,trialID); % these can either be random or some starting value
 
 % Animationloop:
-while (vbl < vblendtime)
+%while (vbl < vblendtime)
+while ~(const.expStop) && ~(const.responded)
 
     if ~const.expStop  
          
@@ -47,28 +44,43 @@ while (vbl < vblendtime)
             phasenow = phasenow*flipphase;
             flicker_time = flicker_time+increment;
         end
-         
+        
+        if testLocation == 0 % right
+            contrast_R = testContrast; contrast_L = adjustedContrast;
+        elseif testLocation == 180 % left
+            contrast_R = adjustedContrast; contrast_L = testContrast;
+        end
+        
+        if strcmp(expDes.stimulus, 'perlinNoise')
+            auxParamsR = [contrast_R, iR+((90)*phasenow), 0, 0];
+            auxParamsL = [contrast_L, iL+((90)*phasenow), 0, 0];
+            auxParamsS = [iS, iS+((90)*phasenow), 0, 0];
+        elseif strcmp(expDes.stimulus, 'grating')
+            auxParamsR = [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0];
+            auxParamsL = [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0];
+            auxParamsS = [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0];
+        end
+        
         % Set the right blend function for drawing the gabors
         Screen('BlendFunction', const.window, 'GL_ONE', 'GL_ZERO');
         
         % surround
         if testLocation == 0
            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
-               [], [], [], [], [], [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0]);
+               [], [], [], [], [], auxParamsS);
         elseif testLocation == 180
            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
-               [], [], [], [], [], [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0]);
+               [], [], [], [], [], auxParamsS);
         end
         
         %if phasenow - should i just present counterphase this way?
         % Draw grating texture, rotated by "angle":
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_R, const.maporientation(const.stimOri), ...
-            [], [], [], [], [], [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0]);
-        % should not be 90 - should be randomized (but not 0) ^^
-        
+            [], [], [], [], [], auxParamsR);
+
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_L, const.maporientation(const.stimOri), ...
-            [], [], [], [], [], [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0]);
-       
+            [], [], [], [], [], auxParamsL);
+        
         % add grey gradient masks
         Screen('BlendFunction', const.window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
         
@@ -91,21 +103,38 @@ while (vbl < vblendtime)
 
         % check for keyboard input
         [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
-        if keyIsDown && keyCode(my_key.escape)
+        if ~keyIsDown % if finger is lifted off key do not set a time contraint
+            reset = 1;
+        elseif keyIsDown && keyCode(my_key.escape)
             ShowCursor; 
             const.forceQuit=1;
             const.expStop=1;
-        elseif keyIsDown && ~keyCode(my_key.escape)
-            expDes.task(frameCounter,2) = 1;   
+        elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space) 
+            const.responded=1; 
+        elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
+            adjustedContrast = adjustedContrast+0.01;
+            reset = 0;
+            if adjustedContrast>1
+                adjustedContrast=1;
+            end
+        elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.leftArrow)) && reset
+            adjustedContrast = adjustedContrast-0.01;
+            reset = 0;
+            if adjustedContrast<0
+                adjustedContrast=0;
+            end
         end
 
-        FlushEvents('KeyDown');
+        % FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
     else
         break
     end
      
 end
+
+% save submitted contrast:
+expDes.response(trialID, 1) = adjustedContrast;
 
 %%
 
