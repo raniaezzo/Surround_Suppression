@@ -29,12 +29,42 @@ const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
-const.stimCosEdge_deg = 0.5; %0.5 ; %1.5;
+% fixed stimulus contrast
+const.contrast = .5; % what to do with this?
+const.contrast_surround = 0.8;
+
+%% Define width of the cosine ramp (and check that smaller than stimulus/surround)
+
+% starting value (set this and the code below will decrease if too large)
+const.stimCosEdge_deg = 0.5;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
-% fixed stimulus contrast
-const.contrast = .5;
-const.contrast_surround = 0.8;
+% calculate the amount of area of surround exclusing target
+const.nonTargetRadiuspix = const.surroundRadiuspix - const.stimRadiuspix;
+const.surround2GapRadiusPix = const.nonTargetRadiuspix*(const.gapRatio); % outer boundary of the gap
+const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
+const.gapWidth = (const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio;
+const.surroundWidth = const.surroundRadiuspix - const.gapWidth - const.stimRadiuspix;
+
+% cosine ramp is applied at the edge of the center stimulus
+% and is applied at the two edges of the surround stimulus
+% so need to make sure that rampSize > center, and 2*rampSize > surroundwith
+
+if const.stimCosEdge_pix > const.stimRadiuspix
+    disp('The soft edges (cosine ramp) exceeds the stimulus radius..')
+    disp('Decreasing the width of the ramp to 1/4 stimRadius..')
+    const.stimCosEdge_pix = const.stimRadiuspix/4; % just make ramp 1/4 of the target radius
+    const.stimCosEdge_deg = pix2vaDeg(const.stimCosEdge_pix, scr);
+end
+if 2*const.stimCosEdge_pix > const.surroundWidth
+    disp('The soft edges (cosine ramp*2) exceeds the surround radius..')
+    disp('Decreasing the width of the ramp to 1/(4*2) surround radius..')
+    const.stimCosEdge_pix = const.surroundWidth/(4*2); % just make ramp 1/4 of the target radius
+    const.stimCosEdge_deg = pix2vaDeg(const.stimCosEdge_pix, scr);
+end
+    
+    
+
 
 %% CENTER GRATING W/ RAMP
 
@@ -63,11 +93,6 @@ mask = ones(length(x),length(x)).*0.5;
 const.centermask=Screen('MakeTexture', const.window, mask);
 
 %% SURROUND GRATING X/ RAMP
-
-% calculate the amount of area of surround exclusing target
-const.nonTargetRadiuspix = const.surroundRadiuspix - const.stimRadiuspix;
-const.surround2GapRadiusPix = const.nonTargetRadiuspix*(const.gapRatio); % outer boundary of the gap
-const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
 
 % SURROUND
 const.surround_halfw= const.surroundRadiuspix;
@@ -98,7 +123,7 @@ const.scalar4noiseSurround = const.scalar4noiseTarget*(const.surroundRadiuspix/c
 
 %% GAP
 % add a solid circle to mask for surround gap
-const.gapRadius_px = round(const.stimRadiuspix+((const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio));
+const.gapRadius_px = round(const.stimRadiuspix+(const.gapWidth));
 %const.gapRadius_px = round((const.visiblesize+((const.visiblesize_surr-const.visiblesize)*const.gapRatio))/2);
 
 %const.gapRadius_px
