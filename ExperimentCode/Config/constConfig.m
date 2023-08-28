@@ -21,6 +21,9 @@ const.stimSF_cpp = const.stimSF_cpd/vaDeg2pix(1, scr);  % cycle per pixel
 const.stimSF_radians = const.stimSF_cpp*(2*pi);         % in radians
 const.stimSF_ppc = ceil(1/const.stimSF_cpp);            % pixel per cycle
 
+% stimulus scalar for noise
+const.scalar4noiseTarget = 0.05; % unitless
+
 % stimulus speed
 const.stimSpeed_cpd = 8;                                    % cycles per degree
 const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
@@ -87,6 +90,10 @@ maskSurr(:,:,2) = surroundmask;
 
 const.surroundmask=Screen('MakeTexture', const.window, maskSurr);
 
+% scalar for surround (this needs to be computed relative to the texture
+% size - due to OpenGL code)
+const.scalar4noiseSurround = const.scalar4noiseTarget*(const.surroundRadiuspix/const.stimRadiuspix);
+
 %% GAP
 % add a solid circle to mask for surround gap
 const.gapRadius_px = round(const.stimRadiuspix+((const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio));
@@ -100,13 +107,10 @@ gap = ones(const.visiblesize_surr, const.visiblesize_surr).*0.5;
 gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix); %const.surroundwavetex
 const.gapTexture=Screen('MakeTexture', const.window, gap);
 
-% TO DO
-% even if there is no gap (0), still make this the cosine ramp.
-
 
 %%
 % prepare input for stimulus
-      const.phaseLine = rand(3, expDes.nb_trials) .* 360;
+const.phaseLine = rand(3, expDes.nb_trials) .* 360;
 
 
 %% PTB orientation/direction conversion

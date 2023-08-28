@@ -23,7 +23,8 @@ expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
 expDes.locations = [0 180]'; 
 expDes.contrasts = const.targetContrast';
 
-expDes.stimulus = 'grating'; %'perlinNoise'; % or grating
+% grating or perlinNoise
+expDes.stimulus = 'perlinNoise';
 
 expDes.mainStimTypes = [];
 for i=1:numel(expDes.locations)

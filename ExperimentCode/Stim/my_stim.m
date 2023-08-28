@@ -52,9 +52,9 @@ while ~(const.expStop) && ~(const.responded)
         end
         
         if strcmp(expDes.stimulus, 'perlinNoise')
-            auxParamsR = [contrast_R, iR+((90)*phasenow), 0, 0];
-            auxParamsL = [contrast_L, iL+((90)*phasenow), 0, 0];
-            auxParamsS = [iS, iS+((90)*phasenow), 0, 0];
+            auxParamsR = [contrast_R, iR+((90)*phasenow), const.scalar4noiseTarget, 0];
+            auxParamsL = [contrast_L, iL+((90)*phasenow), const.scalar4noiseTarget, 0];
+            auxParamsS = [const.contrast_surround, iS+((90)*phasenow), const.scalar4noiseSurround, 0];
         elseif strcmp(expDes.stimulus, 'grating')
             auxParamsR = [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0];
             auxParamsL = [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0];
