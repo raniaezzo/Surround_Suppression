@@ -1,2 +1,2 @@
 scrDist	stimOri	stimEcc	stimRadius	surroundRadius	gapRatio	targetContrast
-57	90	8	2	8	0.2	[0.02, 0.05, 0.1, 0.2, 0.5]
+57	90	8	2	6	0.2	[0.02, 0.05, 0.1, 0.2, 0.5]
