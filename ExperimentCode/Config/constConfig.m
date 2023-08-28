@@ -44,11 +44,13 @@ const.contrast_surround = 0.8;
 const.grating_halfw= const.stimRadiuspix;
 const.visiblesize=2*floor(const.grating_halfw)+1;
 
+backgroundColor = [.5 .5 .5 0];
+
 % center stimulus 
 if strcmp(expDes.stimulus, 'perlinNoise')
-    const.squarewavetex = CreateProceduralScaledNoise(const.window, const.visiblesize, const.visiblesize, 'ClassicPerlin', [.5 .5 .5  0]);
+    const.squarewavetex = CreateProceduralScaledNoise(const.window, const.visiblesize, const.visiblesize, 'ClassicPerlin', backgroundColor);
 elseif strcmp(expDes.stimulus, 'grating')
-    const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesize, const.visiblesize, [.5 .5 .5  0], const.visiblesize/2, 1);
+    const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesize, const.visiblesize, backgroundColor, const.visiblesize/2, 1);
 end
 
 %const.gratingtex=Screen('DrawTexture', const.window, squarewavetex);
@@ -73,9 +75,9 @@ const.visiblesize_surr=2*floor(const.surround_halfw)+1;
 
 % surround stimulus 
 if strcmp(expDes.stimulus, 'perlinNoise')
-    const.surroundwavetex = CreateProceduralScaledNoise(const.window, const.visiblesize_surr, const.visiblesize_surr, 'ClassicPerlin', [.5 .5 .5  0]);
+    const.surroundwavetex = CreateProceduralScaledNoise(const.window, const.visiblesize_surr, const.visiblesize_surr, 'ClassicPerlin', backgroundColor);
 elseif strcmp(expDes.stimulus, 'grating')
-    const.surroundwavetex = CreateProceduralSineGrating(const.window, const.visiblesize_surr, const.visiblesize_surr, [.5 .5 .5  0], const.visiblesize_surr/2, 1);
+    const.surroundwavetex = CreateProceduralSineGrating(const.window, const.visiblesize_surr, const.visiblesize_surr, backgroundColor, const.visiblesize_surr/2, 1);
 end
 
 % initialize gray background mask
