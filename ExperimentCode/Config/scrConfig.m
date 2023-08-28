@@ -45,6 +45,7 @@ scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 
 % save other params to const struct
 const.stimOri = params.stimOri; const.gapRatio = params.gapRatio; 
+const.stimType = params.stimType;
 
 % parse contrast list from tsv file
 contrasts = extractBetween(params.targetContrast{1}, '[',']');

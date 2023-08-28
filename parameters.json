@@ -37,6 +37,14 @@
             "0.5": "50 % contrast"
         }
         "Units": "percent / 100"
+    },
+    "stimType": {
+        "LongName": "Stimulus Type",
+        "Description": "The type of stimulus texture to be used for center and surround.",
+        "Levels": {
+            "grating": "grating stimulus",
+            "noise": "peril noise stimulus"
+        }
     }
 }
 

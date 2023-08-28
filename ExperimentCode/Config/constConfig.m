@@ -111,7 +111,6 @@ x = meshgrid(-const.surround_halfw:const.surround_halfw + const.stimSF_ppc, 1);
 maskSurr = ones(length(x),length(x)).*0.5;
 
 % this is the outer ramp
-disp('creating outer ramp of surround')
 [surroundmask, ~] = create_cosRamp(maskSurr, distance_fromRadius, const.stimCosEdge_pix, 1, [], []); 
 maskSurr(:,:,2) = surroundmask;  
 

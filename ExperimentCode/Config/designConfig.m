@@ -24,7 +24,11 @@ expDes.locations = [0 180]';
 expDes.contrasts = const.targetContrast';
 
 % grating or perlinNoise
-expDes.stimulus = 'perlinNoise';
+if strcmp(const.stimType, 'noise')
+    expDes.stimulus = 'perlinNoise';
+elseif strcmp(const.stimType, 'grating')
+    expDes.stimulus = 'grating';
+end
 
 expDes.mainStimTypes = [];
 for i=1:numel(expDes.locations)

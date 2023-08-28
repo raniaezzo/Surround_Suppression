@@ -2,11 +2,11 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
     
     [~,imsize] = size(gratingtex);
     
-    innerEdgeRadius_low = innerEdgeRadius - rampSize
-    innerEdgeRadius_high = innerEdgeRadius
+    innerEdgeRadius_low = innerEdgeRadius - rampSize;
+    innerEdgeRadius_high = innerEdgeRadius;
     
-    outerEdgeRadius_low = outerEdgeRadius
-    outerEdgeRadius_high = outerEdgeRadius + rampSize
+    outerEdgeRadius_low = outerEdgeRadius;
+    outerEdgeRadius_high = outerEdgeRadius + rampSize;
     
     % initialize mask
     mask = zeros(imsize,imsize);
@@ -55,8 +55,4 @@ function mask = createGap(gratingtex, innerEdgeRadius, outerEdgeRadius, rampSize
             end
          end
       end
-%     disp('outter error')
-%     outerror
-%     disp('inner error')
-%     inerror
           end

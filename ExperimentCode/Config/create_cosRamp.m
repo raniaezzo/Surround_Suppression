@@ -10,7 +10,6 @@ function [mask, filterparam] = create_cosRamp(gratingtex, distance_fromRadius, r
      
      if ~exist('filterparam','var') || isempty(filterparam)
         filterparam = ((imsize-1) / 2) - round(distance_fromRadius);
-        checking = 1;
      end
 
     [xN, yN] = meshgrid(-imsize/2+0.5:imsize/2-0.5, -imsize/2+0.5:imsize/2-0.5);
@@ -23,27 +22,9 @@ function [mask, filterparam] = create_cosRamp(gratingtex, distance_fromRadius, r
     end
 
     inner_radius = filterparam - rampSize;
-    disp(inner_radius)
     outer_radius = filterparam;
-    disp(outer_radius)
-    
-%     if strcmp(flag, 'regular') 
-%         inner_radius = filterparam - rampSize;
-%         outer_radius = filterparam;
-%     elseif strcmp(flag, 'reverse')
-%         outer_radius = filterparam + rampSize;
-%         inner_radius = filterparam;
-%     end
 
     cosX = linspace(-pi, 0, 1001); cosY = (cos(cosX)+1)/2;
-
-%     if strcmp(flag, 'inner2outer') 
-%         cosX = linspace(-pi, 0, 1001);
-%         cosY = (cos(cosX)+1)/2;
-%     elseif strcmp(flag, 'outer2inner')
-%         cosX = linspace(0, pi, 1001);
-%         cosY = (cos(cosX)+1)/2;
-%     end
     
     aa = r - inner_radius;
     test = aa(aa < outer_radius-inner_radius);
@@ -77,8 +58,4 @@ function [mask, filterparam] = create_cosRamp(gratingtex, distance_fromRadius, r
         end
     end
     
-%      if round(distance_fromRadius) ~= 0 % changed (reversed)
-%         mask = 1-mask; %%
-%     end
-    
-         end
+end
