@@ -38,7 +38,7 @@ scr.scr_num = max(Screen('Screens')); % use max screen (typically external monit
 [scrX_mm, scrY_mm] = Screen('DisplaySize',scr.scr_num);
 scr.scrX_cm = scrX_mm/10; scr.scrY_cm = scrY_mm/10;
 
-filepath = fullfile(const.mainDir, 'parameters.tsv');
+filepath = fullfile(sursuppRootPath, 'parameters.tsv');
 params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance

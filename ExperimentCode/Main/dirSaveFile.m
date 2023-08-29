@@ -20,7 +20,7 @@ else
 end
 
 % Subject Directory
-[MainDirectory, ~] = fileparts(pwd);
+MainDirectory = sursuppRootPath;
 datadir = fullfile(MainDirectory, 'Data');
 const.subjDir = fullfile(datadir,const.subjID);
 const.blockLog = fullfile(datadir,const.subjID, 'blocklog.txt');
