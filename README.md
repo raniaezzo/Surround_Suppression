@@ -1,18 +1,39 @@
 # Surround_Suppression
 
-Before running this experiment, please set the parameters in the parameters.tsv file in the main directory (Surround Suppression).
+Steps before running this experiment:
+
+(1) Install any dependencies (see below).
+
+(2) Set the experimental parameters:
+Change values as needed in the parameters.tsv file in the main directory (Surround Suppression).
 The parameters.json file is a dictionary will all of the variables defined for the tsv.
 
-Add the gamma.mat table to the Config folder inside the main directory for accurate contrast settings (otherwise code will not run if debug is off).
+(3) Add the gamma.mat table from the calibration procedure to the Config folder inside the main directory for accurate contrast settings (otherwise code will not run if debug is off).
 
-Run the experiment by running ExperimentCode >> expLauncher.m.
-Data will be saved in a data folder in the main directory.
+~~~~~~~~~~~~~~~~~~
+
+To run experiment:
+
+Run expLauncher.m
+
+~~~~~~~~~~~~~~~~~~
+
+Data will be saved in:
+
+Folder named Data in the main directory.
+
+~~~~~~~~~~~~~~~~~~
 
 Dependencies:
-MATLAB (tested with R2019a, R2020a)
+
+MATLAB (tested with R2019a, R2020a, R2023a)
 Psychtoolbox (tested with v3)
 
-Tested and works on operating systems: MacOS Montery, MacOS Mojave
+~~~~~~~~~~~~~~~~~~
+
+Tested and works on operating systems:
+ 
+MacOS Montery, MacOS Mojave
 
 
 

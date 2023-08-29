@@ -20,11 +20,6 @@ function [cmX,cmY] = pix2cm(pix,scr)
 cmX = (pix*(scr.scrX_cm))/scr.scrX_px;
 cmY = (pix*(scr.scrY_cm))/scr.scrY_px;
 
-
-cmX = (pix*(28.48))/scr.scrX_px;
-cmY = (pix*(17.80))/scr.scrY_px;
-
-
 cmX = round(cmX, 2); % round to 2 decimals for minute differences
 cmY = round(cmY, 2);
 
