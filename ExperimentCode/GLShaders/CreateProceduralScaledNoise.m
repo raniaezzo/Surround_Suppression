@@ -1,4 +1,4 @@
-function [noiseid, noiserect] = CreateProceduralScaledNoise(windowPtr, width, height, noiseType, backgroundColorOffset, varargin)
+function [noiseid, noiserect] = CreateProceduralScaledNoise(windowPtr, width, height, noiseType, backgroundColorOffset, radius, varargin)
 % [noiseid, noiserect] = CreateProceduralNoise(windowPtr, width, height [, noiseType='ClassicPerlin'][, backgroundColorOffset =(0,0,0,0)][, param1][, param2, ...])
 %
 % Creates a procedural texture that allows to draw random noise stimulus patches
@@ -126,6 +126,11 @@ glUseProgram(noiseShader);
 
 % Set color offset:
 glUniform4f(glGetUniformLocation(noiseShader, 'Offset'), backgroundColorOffset(1),backgroundColorOffset(2),backgroundColorOffset(3),backgroundColorOffset(4));
+
+if ~isinf(radius) % just added RE
+    % Set radius of circular aperture:
+    glUniform1f(glGetUniformLocation(noiseShader, 'Radius'), radius);
+end
 
 % Setup done:
 glUseProgram(0);

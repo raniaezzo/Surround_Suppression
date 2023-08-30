@@ -30,7 +30,8 @@ void main()
     gl_Position = ftransform();
 
     /* Pass through texture coordinates: */
-    gl_TexCoord[0] = gl_MultiTexCoord0;
+    gl_TexCoord[0] = (gl_TextureMatrix[0] * gl_MultiTexCoord0) + vec4(-0.5, 0.5, 0.0, 0.0);
+    /*gl_TexCoord[0] = gl_MultiTexCoord0;
 
     /* Contrast value is stored in auxParameters0[0]: */
     float Contrast = auxParameters0[0];

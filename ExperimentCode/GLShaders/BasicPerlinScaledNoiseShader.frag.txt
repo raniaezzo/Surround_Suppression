@@ -9,6 +9,9 @@
  *
  */
 
+uniform float Radius;
+uniform vec2  Center;
+
 uniform vec4  Offset;
 varying vec4  baseColor;
 varying float seed;
@@ -24,6 +27,9 @@ void main()
 
     /* Query current output texel position: */
     v.xy = gl_TexCoord[0].xy;
+
+    /* If distance to center (aka radius of pixel) > Radius, discard this pixel: */
+    if (distance(v.xy, Center+Radius) > Radius) discard;
 
     /* Normalization:
      * 1. floor() position to remove texture coordinate interpolator skew.

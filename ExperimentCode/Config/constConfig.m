@@ -78,12 +78,10 @@ backgroundColor = [.5 .5 .5 0];
 
 % center stimulus 
 if strcmp(expDes.stimulus, 'perlinNoise')
-    const.squarewavetex = CreateProceduralScaledNoise(const.window, const.visiblesize, const.visiblesize, 'ClassicPerlin', backgroundColor);
+    const.squarewavetex = CreateProceduralScaledNoise(const.window, const.visiblesize, const.visiblesize, 'ClassicPerlin', backgroundColor, const.visiblesize/2);
 elseif strcmp(expDes.stimulus, 'grating')
     const.squarewavetex = CreateProceduralSineGrating(const.window, const.visiblesize, const.visiblesize, backgroundColor, const.visiblesize/2, 1);
 end
-
-%const.gratingtex=Screen('DrawTexture', const.window, squarewavetex);
 
 % center ramp
 distance_fromRadius = 0;
@@ -100,7 +98,7 @@ const.visiblesize_surr=2*floor(const.surround_halfw)+1;
 
 % surround stimulus 
 if strcmp(expDes.stimulus, 'perlinNoise')
-    const.surroundwavetex = CreateProceduralScaledNoise(const.window, const.visiblesize_surr, const.visiblesize_surr, 'ClassicPerlin', backgroundColor);
+    const.surroundwavetex = CreateProceduralScaledNoise(const.window, const.visiblesize_surr, const.visiblesize_surr, 'ClassicPerlin', backgroundColor, const.visiblesize_surr/2);
 elseif strcmp(expDes.stimulus, 'grating')
     const.surroundwavetex = CreateProceduralSineGrating(const.window, const.visiblesize_surr, const.visiblesize_surr, backgroundColor, const.visiblesize_surr/2, 1);
 end
@@ -131,6 +129,9 @@ const.gapRadius_px = round(const.stimRadiuspix+(const.gapWidth));
 %gap = ones(length(x),length(x)).*0.5;
 gap = ones(const.visiblesize_surr, const.visiblesize_surr).*0.5;
 gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix); %const.surroundwavetex
+size(gap)
+disp(const.stimRadiuspix)
+disp(const.gapRadius_px)
 const.gapTexture=Screen('MakeTexture', const.window, gap);
 
 
