@@ -5,21 +5,19 @@ iL = const.phaseLine(1,trialID);
 iR = const.phaseLine(2,trialID);
 iS = const.phaseLine(3,trialID);
 
-gratingtex = const.squarewavetex; visiblesize = const.visiblesize;
-surroundtex = const.surroundwavetex; visiblesize_surr = const.visiblesize_surr;
-
 % determine location of the Sm (isolated) and St (embedded)
-testContrast = expDes.trialMat(trialID,2); % contrast value
 testLocation = expDes.trialMat(trialID,3); % RH or LH for embedded stimulus
+testContrast = expDes.trialMat(trialID,2); % contrast value
+adjustedContrast = expDes.startingContrasts(1,trialID); % these can either be random or some starting value
 
 % eccentricity
 xDist = const.stimEccpix; yDist = 0;
 
-dstRect_R = create_dstRect(visiblesize, xDist, yDist, scr, 1); % right side
-dstRect_L = create_dstRect(visiblesize, xDist, yDist, scr, 0); % left side
+dstRect_R = create_dstRect(const.visiblesize, xDist, yDist, scr, 1); % right side
+dstRect_L = create_dstRect(const.visiblesize, xDist, yDist, scr, 0); % left side
 
-dstRect_surround_R = create_dstRect(visiblesize_surr, xDist, yDist, scr, 1); % right side
-dstRect_surround_L = create_dstRect(visiblesize_surr, xDist, yDist, scr, 0); % left side
+dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1); % right side
+dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
 
 waitframes = 1;
 waitduration = waitframes * scr.ifi;
@@ -29,10 +27,9 @@ shiftperframe= const.stimSpeed_cps * const.stimSpeed_ppc * waitduration;
 vblendtime = vbl + movieDurationSecs;
 
 flicker_time = movieDurationSecs/(movieDurationSecs*4); % 4 hz  
-increment = flicker_time; 
+increment = flicker_time;
 flipphase = -1; phasenow = 1;
 const.responded=0;
-adjustedContrast = expDes.startingContrasts(1,trialID); % these can either be random or some starting value
 
 % Animationloop:
 %while (vbl < vblendtime)

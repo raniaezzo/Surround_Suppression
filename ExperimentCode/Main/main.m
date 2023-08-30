@@ -32,8 +32,9 @@ function main(const)
 
 % Main part :
 if const.expStart; ListenChar(2);end
-
 [expDes, const] = runTrials(scr,const,expDes,my_key,textExp);
+
+if ~const.expStop; quickplot(const, expDes); end
 
 overDone(const, expDes);
 

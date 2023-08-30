@@ -44,7 +44,7 @@ params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 
 % save other params to const struct
-const.stimOri = params.stimOri; const.gapRatio = params.gapRatio; 
+const.gapRatio = params.gapRatio; 
 const.stimType = params.stimType;
 
 % parse contrast list from tsv file

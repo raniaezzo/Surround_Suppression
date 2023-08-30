@@ -15,8 +15,10 @@ function [const]=constConfig(scr,const,expDes)
 
 %% Stimulus Properties             
 
+const.stimOri = 90;                                     % 90 deg (vertical orientation)
+
 % stimulus spatial frequency
-const.stimSF_cpd = 1;                                   % cycle per degree
+const.stimSF_cpd = 2;                                   % cycle per degree
 const.stimSF_cpp = const.stimSF_cpd/vaDeg2pix(1, scr);  % cycle per pixel
 const.stimSF_radians = const.stimSF_cpp*(2*pi);         % in radians
 const.stimSF_ppc = ceil(1/const.stimSF_cpp);            % pixel per cycle
@@ -30,13 +32,12 @@ const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
 const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
 
 % fixed stimulus contrast
-const.contrast = .5; % what to do with this?
 const.contrast_surround = 0.8;
 
 %% Define width of the cosine ramp (and check that smaller than stimulus/surround)
 
 % starting value (set this and the code below will decrease if too large)
-const.stimCosEdge_deg = 0.5;
+const.stimCosEdge_deg = 0.3;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
 % calculate the amount of area of surround exclusing target
@@ -62,9 +63,6 @@ if 2*const.stimCosEdge_pix > const.surroundWidth
     const.stimCosEdge_pix = const.surroundWidth/(4*2); % just make ramp 1/4 of the target radius
     const.stimCosEdge_deg = pix2vaDeg(const.stimCosEdge_pix, scr);
 end
-    
-    
-
 
 %% CENTER GRATING W/ RAMP
 

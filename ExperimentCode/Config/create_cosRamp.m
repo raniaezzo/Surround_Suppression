@@ -44,7 +44,11 @@ function [mask, filterparam] = create_cosRamp(gratingtex, distance_fromRadius, r
                 pick = (dist - minR) / (maxR - minR) *1000;
                 choose = round(pick);
                 if strcmp(flag, 'inner2outer') 
-                    mask(ii,jj) = cosY(choose+1);
+                    try
+                        mask(ii,jj) = cosY(choose+1);
+                    catch
+                        mask(ii,jj) = cosY(end);
+                    end
                 elseif strcmp(flag, 'outer2inner')
                     mask(ii,jj) = 1-cosY(choose+1);
                 end

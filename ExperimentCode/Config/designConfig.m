@@ -21,7 +21,6 @@ expDes.rng = rng(const.block);
 expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
 
 expDes.locations = [0 180]'; 
-expDes.contrasts = const.targetContrast';
 
 % grating or perlinNoise
 if strcmp(const.stimType, 'noise')
@@ -29,6 +28,9 @@ if strcmp(const.stimType, 'noise')
 elseif strcmp(const.stimType, 'grating')
     expDes.stimulus = 'grating';
 end
+
+expDes.contrasts = const.targetContrast';
+%const.contrast = .5; % what to do with this?
 
 expDes.mainStimTypes = [];
 for i=1:numel(expDes.locations)
@@ -48,7 +50,7 @@ trialIDs = 1:expDes.nb_trials;
 expDes.trialMat = [trialIDs', trialsequenceMAT];
 
 % starting contrasts
-expDes.startingContrasts = ones(1, expDes.nb_trials)*0.1; %rand(1,expDes.nb_trials);
+expDes.startingContrasts = ones(1, expDes.nb_trials)*0.5; %rand(1,expDes.nb_trials);
 
 %% Experiental timing settings
 
