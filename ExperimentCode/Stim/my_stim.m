@@ -119,7 +119,7 @@ while ~(const.expStop) && ~(const.responded)
             end
         end
 
-        if const.makemovie
+        if const.makemovie && mod(frameCounter,15) == 0
             M = Screen('GetImage', const.window,[],[],0,3);
             imwrite(M,fullfile(const.moviefolder, [num2str(movieframe_n),'.png']));
             movieframe_n = movieframe_n + 1;
