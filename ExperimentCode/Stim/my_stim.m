@@ -20,10 +20,6 @@ dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1
 dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
 
 waitframes = 1;
-waitduration = waitframes * scr.ifi;
-shiftperframe= const.stimSpeed_cps * const.stimSpeed_ppc * waitduration;
-
-%vbl=Screen('Flip', const.window);
 vblendtime = vbl + movieDurationSecs;
 
 flicker_time = movieDurationSecs/(movieDurationSecs*const.flicker_hz); 

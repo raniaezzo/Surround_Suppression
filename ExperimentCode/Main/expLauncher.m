@@ -15,7 +15,7 @@ KbName('UnifyKeyNames')
 warning('off');        % do not print warnings
 const.DEBUG = 0;       % skips subject details / data saving
 const.miniWindow = 0;  % for debugging purposes only
-const.makemovie =0 ;   % capture movie of trial (slows down performance)
+const.makemovie =0;   % capture movie of trial (slows down performance)
 
 % Verify that path is correct
 if isempty(which('instructions'))

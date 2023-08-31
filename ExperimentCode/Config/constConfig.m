@@ -15,10 +15,12 @@ function [const]=constConfig(scr,const,expDes)
 
 %% Stimulus Properties             
 
-if strcmp(expDes.stimulus, 'grating')
-    
-    const.stimOri = 90;                                     % 90 deg (vertical orientation)
 
+% grating and noise can be rotated, but this is only very meaningful for
+% grating
+const.stimOri = 90;                                     % 90 deg (vertical orientation)
+
+if strcmp(expDes.stimulus, 'grating')
     % stimulus spatial frequency
     const.stimSF_cpd = 2;                                   % cycle per degree
     const.stimSF_cpp = const.stimSF_cpd/vaDeg2pix(1, scr);  % cycle per pixel
@@ -83,7 +85,7 @@ end
 
 % center ramp
 distance_fromRadius = 0;
-x = meshgrid(-const.grating_halfw:const.grating_halfw + const.stimSF_ppc, 1);
+x = meshgrid(-const.grating_halfw:const.grating_halfw, 1); % + const.stimSF_ppc, 1);
 mask = ones(length(x),length(x)).*0.5;
 [mask(:,:,2), filterparam] = create_cosRamp(mask, distance_fromRadius, const.stimCosEdge_pix, 1, [], []); % 1 for initialize mask
 const.centermask=Screen('MakeTexture', const.window, mask);
@@ -103,7 +105,7 @@ end
 
 % initialize gray background mask
 distance_fromRadius = 0;
-x = meshgrid(-const.surround_halfw:const.surround_halfw + const.stimSF_ppc, 1);
+x = meshgrid(-const.surround_halfw:const.surround_halfw, 1); % + const.stimSF_ppc, 1);
 maskSurr = ones(length(x),length(x)).*0.5;
 
 % this is the outer ramp
@@ -112,9 +114,11 @@ maskSurr(:,:,2) = surroundmask;
 
 const.surroundmask=Screen('MakeTexture', const.window, maskSurr);
 
-% scalar for surround (this needs to be computed relative to the texture
-% size - due to OpenGL code)
-const.scalar4noiseSurround = const.scalar4noiseTarget*(const.surroundRadiuspix/const.stimRadiuspix);
+if strcmp(expDes.stimulus, 'perlinNoise')
+    % scalar for surround (this needs to be computed relative to the texture
+    % size - due to OpenGL code)
+    const.scalar4noiseSurround = const.scalar4noiseTarget*(const.surroundRadiuspix/const.stimRadiuspix);
+end
 
 %% GAP
 % add a solid circle to mask for surround gap
