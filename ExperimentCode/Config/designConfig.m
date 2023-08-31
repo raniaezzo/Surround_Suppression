@@ -49,8 +49,8 @@ expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'target
 trialIDs = 1:expDes.nb_trials;
 expDes.trialMat = [trialIDs', trialsequenceMAT];
 
-% starting contrasts
-expDes.startingContrasts = ones(1, expDes.nb_trials)*0.5; %rand(1,expDes.nb_trials);
+% starting contrasts per trial (for matching stimulus)
+expDes.startingContrasts = rand(1,expDes.nb_trials);
 
 %% Experiental timing settings
 

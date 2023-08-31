@@ -26,10 +26,11 @@ shiftperframe= const.stimSpeed_cps * const.stimSpeed_ppc * waitduration;
 %vbl=Screen('Flip', const.window);
 vblendtime = vbl + movieDurationSecs;
 
-flicker_time = movieDurationSecs/(movieDurationSecs*4); % 4 hz  
+flicker_time = movieDurationSecs/(movieDurationSecs*const.flicker_hz); 
 increment = flicker_time;
 flipphase = -1; phasenow = 1;
 const.responded=0;
+movieframe_n = 1;
 
 % Animationloop:
 %while (vbl < vblendtime)
@@ -122,6 +123,12 @@ while ~(const.expStop) && ~(const.responded)
             end
         end
 
+        if const.makemovie
+            M = Screen('GetImage', const.window,[],[],0,3);
+            imwrite(M,fullfile(const.moviefolder, [num2str(movieframe_n),'.png']));
+            movieframe_n = movieframe_n + 1;
+        end
+        
         % FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
     else

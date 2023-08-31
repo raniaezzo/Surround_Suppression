@@ -15,23 +15,23 @@ function [const]=constConfig(scr,const,expDes)
 
 %% Stimulus Properties             
 
-const.stimOri = 90;                                     % 90 deg (vertical orientation)
+if strcmp(expDes.stimulus, 'grating')
+    
+    const.stimOri = 90;                                     % 90 deg (vertical orientation)
 
-% stimulus spatial frequency
-const.stimSF_cpd = 2;                                   % cycle per degree
-const.stimSF_cpp = const.stimSF_cpd/vaDeg2pix(1, scr);  % cycle per pixel
-const.stimSF_radians = const.stimSF_cpp*(2*pi);         % in radians
-const.stimSF_ppc = ceil(1/const.stimSF_cpp);            % pixel per cycle
+    % stimulus spatial frequency
+    const.stimSF_cpd = 2;                                   % cycle per degree
+    const.stimSF_cpp = const.stimSF_cpd/vaDeg2pix(1, scr);  % cycle per pixel
+    const.stimSF_radians = const.stimSF_cpp*(2*pi);         % in radians
+    const.stimSF_ppc = ceil(1/const.stimSF_cpp);            % pixel per cycle
+elseif strcmp(expDes.stimulus, 'perlinNoise')
+    % stimulus scalar for noise
+    const.scalar4noiseTarget = 0.05; % unitless
+end
 
-% stimulus scalar for noise
-const.scalar4noiseTarget = 0.05; % unitless
+const.flicker_hz = 4; % in hertz
 
-% stimulus speed
-const.stimSpeed_cpd = 8;                                    % cycles per degree
-const.stimSpeed_cps = const.stimSpeed_cpd*const.stimSF_cpd; % cycles per sec
-const.stimSpeed_ppc = 1/const.stimSF_cpp;                   % pixel per cycle (without ceil, for precise speed)
-
-% fixed stimulus contrast
+% fixed surround contrast
 const.contrast_surround = 0.8;
 
 %% Define width of the cosine ramp (and check that smaller than stimulus/surround)
@@ -119,12 +119,7 @@ const.scalar4noiseSurround = const.scalar4noiseTarget*(const.surroundRadiuspix/c
 %% GAP
 % add a solid circle to mask for surround gap
 const.gapRadius_px = round(const.stimRadiuspix+(const.gapWidth));
-%const.gapRadius_px = round((const.visiblesize+((const.visiblesize_surr-const.visiblesize)*const.gapRatio))/2);
 
-%const.gapRadius_px
-%const.surroundRadiuspix
-
-%gap = ones(length(x),length(x)).*0.5;
 gap = ones(const.visiblesize_surr, const.visiblesize_surr).*0.5;
 gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix); %const.surroundwavetex
 size(gap)
@@ -136,7 +131,6 @@ const.gapTexture=Screen('MakeTexture', const.window, gap);
 %%
 % prepare input for stimulus
 const.phaseLine = rand(3, expDes.nb_trials) .* 360;
-
 
 %% PTB orientation/direction conversion
 % 

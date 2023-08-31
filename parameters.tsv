@@ -1,2 +1,2 @@
 scrDist	stimEcc	stimRadius	surroundRadius	gapRatio	targetContrast	stimType
-57	10	2	6	0	[0.1, 0.2, 0.4, 0.8]	grating
+57	8	2	5	0	[0.1, 0.2, 0.4, 0.8]	noise

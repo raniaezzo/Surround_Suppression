@@ -51,4 +51,11 @@ const.expRes_fileCsv =  fullfile(const.blockDir, sprintf('S%s_expRes_Block%i.csv
 const.design_fileMat =  fullfile(const.blockDir, sprintf('S%s_design_Block%i.mat',const.subjID, const.block));
 const.responses_fileMat =  fullfile(const.blockDir, sprintf('S%s_responses_Block%i.mat',const.subjID, const.block));
 
+if const.makemovie
+    const.moviefolder = fullfile(const.blockDir, 'trialmovie');
+    if ~isfolder(const.moviefolder)
+        mkdir(const.moviefolder);
+    end
+end
+
 end

@@ -58,6 +58,9 @@ if ~computerDetails.windows
         case 'Ranias-MacBook-Pro-2'
             scr.experimenter = 'RE';
             const.keyboard = 'Apple Internal Keyboard / Trackpad';
+            if scr.scr_num == 1
+                scr.scrX_cm = 62; scr.scrY_cm = 34;
+            end
             Screen('Preference', 'SkipSyncTests', 1);
         otherwise
             scr.experimenter = 'Unknown';
