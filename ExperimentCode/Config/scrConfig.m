@@ -20,10 +20,6 @@ const.text_size = 20;
 const.text_font = 'Helvetica';
 
 % Color Configuration :
-const.white =    [ 1,  1,  1];
-const.gray =    [ .5,  .5,  .5];
-const.black =   [  0,   0,   0];
-const.lightgray =   [  0.75,   0.75,   0.75 ];
 
 % Time
 const.my_clock_ini = clock;
@@ -33,6 +29,10 @@ scale2screen = 0;
 computerDetails = Screen('Computer');  % check computer specs
 
 scr.scr_num = max(Screen('Screens')); % use max screen (typically external monitor)
+const.white = WhiteIndex(scr.scr_num);
+const.black = BlackIndex(scr.scr_num);
+const.gray  = GrayIndex(scr.scr_num);
+const.lightgray =   [  0.75,   0.75,   0.75 ];
 
 % Size of the display (mm)
 [scrX_mm, scrY_mm] = Screen('DisplaySize',scr.scr_num);
@@ -103,6 +103,7 @@ else
     scr.windX_px = scr.windX_px;
     scr.windY_px = scr.windY_px;
     scr_dim = []; % PTB says better precision when empty
+    [~] = Screen('Preference', 'SkipSyncTests', 1); % skip timing checks for debugging
 end
 
 % check if lawful parameter size relative to screen
@@ -152,14 +153,14 @@ const.fixationRadius_deg = pix2vaDeg(const.fixationRadius_px, scr);
 %%
 
 
-PsychDefaultSetup(2); % assert OpenGL, setup unifiedkeys and unit color range
-PsychImaging('PrepareConfiguration'); % First step in starting pipeline
-PsychImaging('AddTask', 'General', 'FloatingPoint32BitIfPossible');
+% PsychDefaultSetup(2); % assert OpenGL, setup unifiedkeys and unit color range
+% PsychImaging('PrepareConfiguration'); % First step in starting pipeline
+% PsychImaging('AddTask', 'General', 'FloatingPoint32BitIfPossible');
 ListenChar(1);                        % Listen for keyboard input
 
 % open a grey window (size defined above)
-[const.window, const.windowRect] = PsychImaging('OpenWindow', scr.scr_num, ...
-    [.5 .5 .5], scr_dim, [], [], [], [], []);
+[const.window, const.windowRect] = PsychImaging('OpenWindow', scr.scr_num, [.5 .5 .5], scr_dim, [], [], [], [], []);
+
 
 % Get the centre coordinate of the window
 [xCenter, yCenter] = RectCenter(const.windowRect);
