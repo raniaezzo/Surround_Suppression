@@ -1,11 +1,5 @@
 %% General experimenter launcher %%
 %  =============================  %
-% before you run the experiment, make sure to input the directory to the
-% experiment and Psychtoolbox in the parameters.tsv files first and second
-% columns! 
-params = readtable('parameters.tsv', "FileType","text",'Delimiter', '\t');
-addpath(genpath(params.path2project{1}))
-addpath(genpath(params.path2ptb{1}))
 
 % Clean up:
 sca; Screen('CloseAll'); 

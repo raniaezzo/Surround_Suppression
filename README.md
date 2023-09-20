@@ -12,9 +12,20 @@ The parameters.json file is a dictionary will all of the variables defined for t
 
 ~~~~~~~~~~~~~~~~~~
 
-To run experiment:
+To setup run experiment:
 
-Run expLauncher.m
+(1) Ensure Psychtoolbox (PTB) is on the MATLAB path. 
+
+(Optional) To permanently add PTB to MATLAB path, run:
+
+addpath /path/to/psychtoolbox/
+savepath
+
+(2) Navigate to Surround_Suppression directory
+
+cd /path/to/Surround_Suppression/
+
+(3) Run expLauncher.m
 
 ~~~~~~~~~~~~~~~~~~
 
@@ -34,6 +45,12 @@ Psychtoolbox (tested with v3)
 Tested and works on operating systems:
  
 MacOS Montery, MacOS Mojave
+
+~~~~~~~~~~~~~~~~~~
+
+Troubleshooting:
+
+If using MacOS, you may need to grant keyboard access to MATLAB (in system preferences).
 
 
 
