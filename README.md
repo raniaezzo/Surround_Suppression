@@ -35,6 +35,12 @@ Folder named Data in the main directory.
 
 ~~~~~~~~~~~~~~~~~~
 
+Instructions for participants:
+
+"During each trial you will see two 2 stimuli in your periphery (one isolated patch and one embedded patch within a surround). Please use the arrow keys (right/left) to adjust the contrast of the isolated stimulus to best match the embedded stimulus. Once the contrasts match, press the space bar to submit your response. IMPORTANT: throughout the experiment, please keep looking at the central fixation marker."
+
+~~~~~~~~~~~~~~~~~~
+
 Dependencies:
 
 MATLAB (tested with R2019a, R2020a, R2023a)
