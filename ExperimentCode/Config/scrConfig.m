@@ -52,6 +52,8 @@ contrasts = extractBetween(params.targetContrast{1}, '[',']');
 contrasts = strsplit(contrasts{1},',');
 const.targetContrast = arrayfun(@(x) str2double(contrasts{x}),1:length(contrasts));
 
+[scr.frameRate] = Screen('FrameRate', scr.scr_num);
+
 % find screen details
 if ~computerDetails.windows
     switch computerDetails.localHostName
@@ -67,6 +69,12 @@ if ~computerDetails.windows
     end
 else    % PC (field names are different)
     scr.experimenter = 'Unknown';
+end
+
+% try to detect framerate: if not, set to a default and print warning..
+if ~scr.frameRate
+    disp('PTB could not detect framerate. Setting default to 60 hz.')
+    scr.frameRate = 60;
 end
 
 if strcmp(scr.experimenter, 'Unknown') % default

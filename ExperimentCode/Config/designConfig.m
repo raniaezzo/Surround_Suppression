@@ -54,18 +54,18 @@ expDes.startingContrasts = rand(1,expDes.nb_trials);
 
 %% Experiental timing settings
 
-expDes.stimDur_s  = 10;   % 0.5 sec stimulus duration
+expDes.stimDur_s  = 1;   % 0.5 sec stimulus duration
 expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
-expDes.total_s = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s));
+%expDes.total_s = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s));
 
-expDes.stimDur_nFrames  =     round(expDes.stimDur_s/scr.ifi); % # frames
-expDes.itiDur_nFrames  =      round(expDes.itiDur_s/scr.ifi); % # frames
+%expDes.stimDur_nFrames  =     round(expDes.stimDur_s/scr.ifi); % # frames
+%expDes.itiDur_nFrames  =      round(expDes.itiDur_s/scr.ifi); % # frames
 
-expDes.totalframes = expDes.stimDur_nFrames*expDes.nb_trials+ ...
-    expDes.itiDur_nFrames*expDes.nb_trials;
+%expDes.totalframes = expDes.stimDur_nFrames*expDes.nb_trials+ ...
+%    expDes.itiDur_nFrames*expDes.nb_trials;
  
-expDes.TrialsStart_frame = 1;
-expDes.TrialsEnd_frame = expDes.totalframes;
+%expDes.TrialsStart_frame = 1;
+%expDes.TrialsEnd_frame = expDes.totalframes;
 
 %% Saving procedure
 

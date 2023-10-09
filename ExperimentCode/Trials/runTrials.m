@@ -26,9 +26,6 @@ end
 keyCode = instructions(scr,const,my_key,textExp.instruction);
 tic
 
-% cols: contrast, RT
-expDes.task = nan(expDes.nb_trials, 2);
-
 if keyCode(my_key.escape), return, end
 
 FlushEvents('KeyDown');

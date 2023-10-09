@@ -1,9 +1,7 @@
 function [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, trialID, vbl)
 
-movieDurationSecs=expDes.stimDur_s;   % Abort after 0.5 seconds.
 iL = const.phaseLine(1,trialID);
 iR = const.phaseLine(2,trialID);
-iS = const.phaseLine(3,trialID);
 
 % determine location of the Sm (isolated) and St (embedded)
 testLocation = expDes.trialMat(trialID,3); % RH or LH for embedded stimulus
@@ -20,23 +18,23 @@ dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1
 dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
 
 waitframes = 1;
-vblendtime = vbl + movieDurationSecs;
+startTime = vbl;
 
-flicker_time = movieDurationSecs/(movieDurationSecs*const.flicker_hz); 
-increment = flicker_time;
+flicker_time = 1/const.flicker_hz; 
 flipphase = -1; phasenow = 1;
-const.responded=0;
+responded=0;
+responseTime = NaN;
 movieframe_n = 1;
 
+frameCounter_init = frameCounter;
+
 % Animationloop:
-%while (vbl < vblendtime)
-while ~(const.expStop) && ~(const.responded)
+while ~(const.expStop) && ~(responded)
 
     if ~const.expStop  
          
-        if (movieDurationSecs-(vblendtime-vbl)) > flicker_time
+        if mod((frameCounter-frameCounter_init), flicker_time*(scr.frameRate)) == 0
             phasenow = phasenow*flipphase;
-            flicker_time = flicker_time+increment;
         end
         
         if testLocation == 0 % right
@@ -48,11 +46,19 @@ while ~(const.expStop) && ~(const.responded)
         if strcmp(expDes.stimulus, 'perlinNoise')
             auxParamsR = [contrast_R, iR+((90)*phasenow), const.scalar4noiseTarget, 0];
             auxParamsL = [contrast_L, iL+((90)*phasenow), const.scalar4noiseTarget, 0];
-            auxParamsS = [const.contrast_surround, iS+((90)*phasenow), const.scalar4noiseSurround, 0];
+            if testLocation == 0
+                auxParamsS = [const.contrast_surround, iR+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
+            elseif testLocation == 180
+                auxParamsS = [const.contrast_surround, iL+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
+            end
         elseif strcmp(expDes.stimulus, 'grating')
             auxParamsR = [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0];
             auxParamsL = [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0];
-            auxParamsS = [iS+((90)*phasenow), const.stimSF_cpp, const.contrast_surround, 0];
+            if testLocation == 0
+                auxParamsS = [iR+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
+            elseif testLocation == 180
+                auxParamsS = [iL+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
+            end
         end
         
         % Set the right blend function for drawing the gabors
@@ -104,7 +110,8 @@ while ~(const.expStop) && ~(const.responded)
             const.forceQuit=1;
             const.expStop=1;
         elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space) 
-            const.responded=1; 
+            responseTime = vbl-startTime;
+            responded=1; 
         elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
             adjustedContrast = adjustedContrast+0.01;
             reset = 0;
@@ -135,6 +142,7 @@ end
 
 % save submitted contrast:
 expDes.response(trialID, 1) = adjustedContrast;
+expDes.response(trialID, 2) = responseTime;
 
 %%
 

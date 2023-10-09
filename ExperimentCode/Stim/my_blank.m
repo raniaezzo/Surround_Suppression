@@ -21,8 +21,8 @@ try
                 ShowCursor; 
                 const.forceQuit=1;
                 const.expStop=1;
-            elseif keyIsDown && ~keyCode(my_key.escape)
-                expDes.task(frameCounter,2) = 1;   
+%             elseif keyIsDown && ~keyCode(my_key.escape)
+%                 expDes.task(frameCounter,2) = 1;   
             end
 
             FlushEvents('KeyDown');

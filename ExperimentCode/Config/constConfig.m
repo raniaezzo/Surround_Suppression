@@ -43,9 +43,9 @@ const.stimCosEdge_deg = 0.3;
 const.stimCosEdge_pix = vaDeg2pix(const.stimCosEdge_deg, scr);
 
 % calculate the amount of area of surround exclusing target
-const.nonTargetRadiuspix = const.surroundRadiuspix - const.stimRadiuspix;
-const.surround2GapRadiusPix = const.nonTargetRadiuspix*(const.gapRatio); % outer boundary of the gap
-const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
+%const.nonTargetRadiuspix = const.surroundRadiuspix - const.stimRadiuspix;
+%const.surround2GapRadiusPix = const.nonTargetRadiuspix*(const.gapRatio); % outer boundary of the gap
+%const.gap_pxfromBoundary = const.surroundRadiuspix*(const.gapRatio);
 const.gapWidth = (const.surroundRadiuspix-const.stimRadiuspix)*const.gapRatio;
 const.surroundWidth = const.surroundRadiuspix - const.gapWidth - const.stimRadiuspix;
 
@@ -134,7 +134,7 @@ const.gapTexture=Screen('MakeTexture', const.window, gap);
 
 %%
 % prepare input for stimulus
-const.phaseLine = rand(3, expDes.nb_trials) .* 360;
+const.phaseLine = rand(2, expDes.nb_trials) .* 360;
 
 %% PTB orientation/direction conversion
 % 
