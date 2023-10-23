@@ -50,7 +50,13 @@ trialIDs = 1:expDes.nb_trials;
 expDes.trialMat = [trialIDs', trialsequenceMAT];
 
 % starting contrasts per trial (for matching stimulus)
-expDes.startingContrasts = rand(1,expDes.nb_trials);
+% make the contrasts different (for adjustment)
+if strcmp(const.expPar, 'behavioral')
+    expDes.startingContrasts = rand(1,expDes.nb_trials);
+% make the contrasts between the two stimuli the same (no adjustment/discrimination)
+elseif strcmp(const.expPar, 'neural') 
+    expDes.startingContrasts = expDes.trialMat(:,2)';
+end
 
 %% Experiental timing settings
 

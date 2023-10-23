@@ -6,7 +6,7 @@ iR = const.phaseLine(2,trialID);
 % determine location of the Sm (isolated) and St (embedded)
 testLocation = expDes.trialMat(trialID,3); % RH or LH for embedded stimulus
 testContrast = expDes.trialMat(trialID,2); % contrast value
-adjustedContrast = expDes.startingContrasts(1,trialID); % these can either be random or some starting value
+adjustedContrast = expDes.startingContrasts(1,trialID);
 
 % eccentricity
 dstRect_surround_R = const.rectPointsSurr{1};
