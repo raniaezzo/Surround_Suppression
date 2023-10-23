@@ -37,7 +37,12 @@ Folder named Data in the main directory.
 
 Instructions for participants:
 
+
+Behavioral Paradigm (method of adjustment):
 "During each trial you will see two 2 stimuli in your periphery (one isolated patch and one embedded patch within a surround). Please use the arrow keys (right/left) to adjust the contrast of the isolated stimulus to best match the embedded stimulus. Once the contrasts match, press the space bar to submit your response. IMPORTANT: throughout the experiment, please keep looking at the central fixation marker."
+
+Neural Paradigm:
+"During each trial, two 2 stimuli will be presented in your periphery (one isolated patch and one embedded patch within a surround). There will be a series of letters that appear at the location where you are fixating. Every time you detect the letter A, press the space bar. Try your best to keep fixating at the center for the entire experiment."
 
 ~~~~~~~~~~~~~~~~~~
 

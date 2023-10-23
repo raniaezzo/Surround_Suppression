@@ -9,13 +9,19 @@ testContrast = expDes.trialMat(trialID,2); % contrast value
 adjustedContrast = expDes.startingContrasts(1,trialID); % these can either be random or some starting value
 
 % eccentricity
-xDist = const.stimEccpix; yDist = 0;
+dstRect_surround_R = const.rectPointsSurr{1};
+dstRect_surround_L = const.rectPointsSurr{2};
 
-dstRect_R = create_dstRect(const.visiblesize, xDist, yDist, scr, 1); % right side
-dstRect_L = create_dstRect(const.visiblesize, xDist, yDist, scr, 0); % left side
+dstRect_R = const.rectPoints{1};
+dstRect_L = const.rectPoints{2};
 
-dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1); % right side
-dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
+%xDist = const.stimEccpix; yDist = 0;
+
+%dstRect_R = create_dstRect(const.visiblesize, xDist, yDist, scr, 1); % right side
+%dstRect_L = create_dstRect(const.visiblesize, xDist, yDist, scr, 0); % left side
+
+%dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1); % right side
+%dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
 
 waitframes = 1;
 startTime = vbl;
@@ -37,26 +43,26 @@ while ~(const.expStop) && ~(responded)
             phasenow = phasenow*flipphase;
         end
         
-        if testLocation == 0 % right
+        if testLocation == const.paIdx1 % right
             contrast_R = testContrast; contrast_L = adjustedContrast;
-        elseif testLocation == 180 % left
+        elseif testLocation == const.paIdx2 % left
             contrast_R = adjustedContrast; contrast_L = testContrast;
         end
         
         if strcmp(expDes.stimulus, 'perlinNoise')
             auxParamsR = [contrast_R, iR+((90)*phasenow), const.scalar4noiseTarget, 0];
             auxParamsL = [contrast_L, iL+((90)*phasenow), const.scalar4noiseTarget, 0];
-            if testLocation == 0
+            if testLocation == const.paIdx1
                 auxParamsS = [const.contrast_surround, iR+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
-            elseif testLocation == 180
+            elseif testLocation == const.paIdx2
                 auxParamsS = [const.contrast_surround, iL+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
             end
         elseif strcmp(expDes.stimulus, 'grating')
             auxParamsR = [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0];
             auxParamsL = [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0];
-            if testLocation == 0
+            if testLocation == const.paIdx1
                 auxParamsS = [iR+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
-            elseif testLocation == 180
+            elseif testLocation == const.paIdx2
                 auxParamsS = [iL+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
             end
         end
@@ -65,10 +71,10 @@ while ~(const.expStop) && ~(responded)
         Screen('BlendFunction', const.window, 'GL_ONE', 'GL_ZERO');
         
         % surround
-        if testLocation == 0
+        if testLocation == const.paIdx1
            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
                [], [], [], [], [], auxParamsS);
-        elseif testLocation == 180
+        elseif testLocation == const.paIdx2
            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
                [], [], [], [], [], auxParamsS);
         end
@@ -84,11 +90,11 @@ while ~(const.expStop) && ~(responded)
         % add grey gradient masks
         Screen('BlendFunction', const.window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
         
-        if testLocation == 0
+        if testLocation == const.paIdx1
             Screen('DrawTexture', const.window, const.centermask, [], dstRect_L, [], [], [], [], [], []);
             Screen('DrawTexture', const.window, const.surroundmask, [], dstRect_surround_R, [], [], [], [], [], []);
             Screen('DrawTexture', const.window, const.gapTexture, [], dstRect_surround_R, [], [], [], [], [], []);
-        elseif testLocation == 180
+        elseif testLocation == const.paIdx2
             Screen('DrawTexture', const.window, const.centermask, [], dstRect_R, [], [], [], [], [], []);
             Screen('DrawTexture', const.window, const.surroundmask, [], dstRect_surround_L, [], [], [], [], [], []);
             Screen('DrawTexture', const.window, const.gapTexture, [], dstRect_surround_L, [], [], [], [], [], []);
@@ -146,13 +152,13 @@ expDes.response(trialID, 2) = responseTime;
 
 %%
 
-function dstRect = create_dstRect(visiblesize, xDist, yDist, scr, rightside)
-    if ~rightside
-        xDist = -xDist;
-    end
-    xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
-    yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
-    dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
-end
+% function dstRect = create_dstRect(visiblesize, xDist, yDist, scr, rightside)
+%     if ~rightside
+%         xDist = -xDist;
+%     end
+%     xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
+%     yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
+%     dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
+% end
 
 end

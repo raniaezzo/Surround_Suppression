@@ -1,19 +1,27 @@
 
 {
+    "expPar": {
+        "LongName": "Experiment Paradigm",
+        "Description": "The experiment is coded to run in two ways depending on whether the primary variable of interest is behavioral or neural. For the behavioral task, stimuli are presented to the right and left of fixation; contrast response functions are the main output; fixed contrast levels are tested; and subjects are asked to make a contrast judgement either by adjustment or discrimination. For the neural task, stimuli are presented inside the specified RF and its symmetrical but opposite location; the behavioral output is from a letter detection task at fixation; contrast levels of the embedded and isolated stimulus are identical; and subjects are simply asked remain fixating and to press a button when an A appears on the screen.",
+        "Levels": {
+            "behavioral": "behavioral paradigm",
+            "neural": "neural paradigm"
+        }
+    },
     "scrDist": {
         "LongName": "Screen Distance",
         "Description": "Distance between the screen center and the eye.",
         "Units": "centimeters"
     },
-    "stimOri": {
-        "LongName": "Stimulus Orientation",
-        "Description": "Orientation of the stimulus (0 is horizontal and values move counterclockwise).",
-        "Units": "degrees"
-    },
     "stimEcc": {
         "LongName": "Stimulus Eccentricity",
         "Description": "Distance from the center of the screen to the center of the stimulus.",
         "Units": "degrees of visual angle"
+    },
+    "stimPaLocs": {
+        "LongName": "Stimulus Polar Angle Locations",
+        "Description": "Polar angle locations of the stimuli (e.g., 0 = right, 90 = up, 180 = left, 270 = down). If running expPar=neural, you would set this to the polar angle of the RF location and it's +- 180 counterpart. Otherwise, you can keep it at 0 and 180 to test positions to the left/right of fixation. Must be two values be greater than 0 and less than 360.",
+        "Units": "degrees"
     },
     "stimRadius": {
         "LongName": "Stimulus Radius",

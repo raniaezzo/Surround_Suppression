@@ -144,6 +144,24 @@ const.maporientation = containers.Map(orientationids,ptborientation);
 directionids = 0:45:315; ptbdirection = {180, 135, 90, 45, 0, 315, 270, 225};
 const.mapdirection = containers.Map(directionids,ptbdirection);
 
+%% Determine rect positions
+
+% convert polar angle and eccentricity to x,y
+theta = deg2rad(expDes.locations); % Convert angle to radians
+rho = repmat(const.stimEccpix, 1, length(theta));
+
+xPos = rho .* cos(theta);
+yPos = rho .* sin(theta);
+
+for li=1:length(xPos)
+    const.rectPoints{li} = create_dstRect(const.visiblesize, xPos(li), yPos(li), scr.windCenter_px);
+end
+
+for li=1:length(xPos)
+    const.rectPointsSurr{li} = create_dstRect(const.visiblesize_surr, xPos(li), yPos(li), scr.windCenter_px);
+end
+
+
 %% Saving procedure :
 
 const.expStart = 0;
@@ -152,4 +170,12 @@ const.expStart = 0;
 save(const.const_fileMat,'const');
 
 
+end
+
+function dstRect = create_dstRect(visiblesize, xPos, yPos, center)
+    xPoint1 = center(1)+xPos-(visiblesize/2); % center + (+- distance added in pixels)
+    yPoint1 = center(2)+yPos-(visiblesize/2);  % check with -(vis part.. 
+    xPoint2 = center(1)+xPos+(visiblesize/2);
+    yPoint2 = center(2)+yPos+(visiblesize/2);
+    dstRect=[xPoint1 yPoint1 xPoint2 yPoint2];
 end

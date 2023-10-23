@@ -23,7 +23,6 @@ const.text_font = 'Helvetica';
 
 % Time
 const.my_clock_ini = clock;
-scale2screen = 0;
     
 %% Screen
 computerDetails = Screen('Computer');  % check computer specs
@@ -46,6 +45,34 @@ scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 % save other params to const struct
 const.gapRatio = params.gapRatio; 
 const.stimType = params.stimType;
+const.expPar = params.expPar;
+
+% parse polar angle list from tsv file
+polarangles = extractBetween(params.stimPaLocs{1}, '[',']');
+polarangles = strsplit(polarangles{1},',');
+params.stimPaLocs = arrayfun(@(x) str2double(polarangles{x}),1:length(polarangles));
+
+const.paLocs = params.stimPaLocs';
+const.paLocs = sort(const.paLocs); % order from least to greatest
+const.paIdx1 = const.paLocs(1); const.paIdx2 = const.paLocs(2);
+
+% check that paLocs are two values between 0-360 and that the values are
+% 180 degrees apart.
+if length(const.paLocs) ~= 2
+    error('Number of stimulus polar angle (stimPaLocs) must be two.')
+elseif any(const.paLocs<0) || any(const.paLocs>=360)
+    error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
+elseif max(const.paLocs) - min(const.paLocs) ~= 180
+    error('Polar angle positions (stimPaLocs) must be 180 degrees apart.')
+end
+
+% this warns experimenter that this is the behavioral paradigm that
+% typically is run with canonical locations 0 and 180.
+if strcmp(const.expPar, 'behavioral')
+    if ~ (any(const.paLocs == 0) && any(const.paLocs == 180))
+        input('WARNING: Behavioral task but not R/L locations. Press ENTER to continue anyway..', 's');
+    end
+end
 
 % parse contrast list from tsv file
 contrasts = extractBetween(params.targetContrast{1}, '[',']');
@@ -115,21 +142,21 @@ else
 end
 
 % check if lawful parameter size relative to screen
-if const.surroundRadiuspix >= const.stimEccpix
-    disp('Surround radius must NOT exceed stimulus eccentricity.')
-    scale2screen = 1;
+if const.surroundRadiuspix >= const.stimEccpix && ~const.scale2screen
+    error('Surround radius must NOT exceed stimulus eccentricity.')
+    %const.scale2screen = 1;
 end
-if const.surroundRadiuspix >= scr.windY_px/2
-    disp('Surround radius must NOT exceed half the screen height.')
-    scale2screen = 1;
+if const.surroundRadiuspix >= scr.windY_px/2 && ~const.scale2screen
+    error('Surround radius must NOT exceed half the screen height.')
+    %const.scale2screen = 1;
 end
-if const.surroundRadiuspix+const.stimEccpix >= scr.windX_px/2
-    disp('Surround radius + eccentricity must NOT exceed the screen width.')
-    scale2screen = 1;
+if const.surroundRadiuspix+const.stimEccpix >= scr.windX_px/2 && ~const.scale2screen
+    error('Surround radius + eccentricity must NOT exceed the screen width.')
+    %const.scale2screen = 1;
 end
 %
 
-if scale2screen % this is mainly for testing
+if const.scale2screen % this is mainly for testing
     disp('Scaling params to fit current window..')
     disp('and setting eccentricity to maximize stimulus range..')
     

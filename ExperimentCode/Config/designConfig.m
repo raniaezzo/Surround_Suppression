@@ -20,7 +20,7 @@ expDes.rng = rng(const.block);
 
 expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
 
-expDes.locations = [0 180]'; 
+expDes.locations = const.paLocs; 
 
 % grating or perlinNoise
 if strcmp(const.stimType, 'noise')
