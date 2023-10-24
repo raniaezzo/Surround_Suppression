@@ -20,7 +20,7 @@ function [expDes, const] = runTrials(scr,const,expDes,my_key,textExp)
 %% General instructions:
 
 if const.DEBUG
-    HideCursor(scr.scr_num);
+    ShowCursor(scr.scr_num);
 end
 
 %keyCode = instructions(scr,const,my_key,textExp.instruction);
