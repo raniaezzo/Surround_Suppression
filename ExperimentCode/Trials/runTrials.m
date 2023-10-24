@@ -20,13 +20,13 @@ function [expDes, const] = runTrials(scr,const,expDes,my_key,textExp)
 %% General instructions:
 
 if const.DEBUG
-    ShowCursor(scr.scr_num);
+    HideCursor(scr.scr_num);
 end
 
-%keyCode = instructions(scr,const,my_key,textExp.instruction);
+keyCode = instructions(scr,const,my_key,textExp.instruction);
 tic
 
-%if keyCode(my_key.escape), return, end
+if keyCode(my_key.escape), return, end
 
 FlushEvents('KeyDown');
 
