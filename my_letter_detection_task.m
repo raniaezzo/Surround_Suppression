@@ -1,13 +1,15 @@
 function my_letter_detection_task(scr, const, color, trialLetterString)
+
 x_mid = scr.windCenter_px(1);
 y_mid = scr.windCenter_px(2);
-textstring = cellstr(trialLetterString);
-sizeT = size(textstring);
-lines = sizeT(1)+2;
-bound = Screen('TextBounds',const.window,textstring{1,:});
-espace = ((const.text_size)*1.50);
-first_line = y_mid - ((round(lines/2))*espace);
+text = cellstr(trialLetterString);
 
-for t_lines = 1:sizeT(1)
-    Screen('DrawText',const.window,textstring{t_lines,:},x_mid-bound(3)/2,first_line*espace, color);
-end
+Screen('Preference', 'TextAntiAliasing',1);
+Screen('TextSize',const.window, const.text_size);
+Screen ('TextFont', const.window, const.text_font);
+
+sizeT = size(text);
+lines = sizeT(1)+2;
+bound = Screen('TextBounds',const.window,text{1,:});
+
+Screen('DrawText',const.window,text{1,:},x_mid-bound(3)/2,y_mid, color);
