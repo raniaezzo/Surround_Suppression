@@ -8,6 +8,8 @@ testLocation = expDes.trialMat(trialID,3); % RH or LH for embedded stimulus
 testContrast = expDes.trialMat(trialID,2); % contrast value
 adjustedContrast = expDes.startingContrasts(1,trialID);
 
+% for the letter detection task:
+trialLetterString = expDes.letter_detection_sequence(trialID); 
 % eccentricity
 dstRect_surround_R = const.rectPointsSurr{1};
 dstRect_surround_L = const.rectPointsSurr{2};
@@ -33,6 +35,9 @@ responseTime = NaN;
 movieframe_n = 1;
 
 frameCounter_init = frameCounter;
+
+% stimulus timing:
+t2wait = 0.5; % based on Hermes et al., 2014 
 
 % Animationloop:
 while ~(const.expStop) && ~(responded)
@@ -86,10 +91,10 @@ while ~(const.expStop) && ~(responded)
 
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_L, const.maporientation(const.stimOri), ...
             [], [], [], [], [], auxParamsL);
-        
+
         % add grey gradient masks
         Screen('BlendFunction', const.window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-        
+
         if testLocation == const.paIdx1
             Screen('DrawTexture', const.window, const.centermask, [], dstRect_L, [], [], [], [], [], []);
             Screen('DrawTexture', const.window, const.surroundmask, [], dstRect_surround_R, [], [], [], [], [], []);
@@ -101,37 +106,61 @@ while ~(const.expStop) && ~(responded)
         end
 
         % Draw stimuli here, better at the start of the drawing loop
-        my_fixation(scr,const,const.black)
-
-        Screen('DrawingFinished',const.window); % small ptb optimisation
-
-        vbl = Screen('Flip',const.window, vbl + (waitframes - 0.5) * scr.ifi);
-
-        % check for keyboard input
-        [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
-        if ~keyIsDown % if finger is lifted off key do not set a time contraint
-            reset = 1;
-        elseif keyIsDown && keyCode(my_key.escape)
-            ShowCursor; 
-            const.forceQuit=1;
-            const.expStop=1;
-        elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space) 
-            responseTime = vbl-startTime;
-            responded=1; 
-        elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
-            adjustedContrast = adjustedContrast+0.01;
-            reset = 0;
-            if adjustedContrast>1
-                adjustedContrast=1;
-            end
-        elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.leftArrow)) && reset
-            adjustedContrast = adjustedContrast-0.01;
-            reset = 0;
-            if adjustedContrast<0
-                adjustedContrast=0;
-            end
+        if strcmp(const.expPar, 'neural')
+            my_letter_detection_task(scr, const, const.black, trialLetterString)
+        elseif strcmp(const.expPar, 'behavioral')
+            my_fixation(scr,const,const.black)
         end
 
+        Screen('DrawingFinished',const.window); % small ptb optimisation
+        time_to_start = GetSecs;
+        vbl = Screen('Flip',const.window, vbl + (waitframes - 0.5) * scr.ifi);
+
+        if strcmp(const.expPar, 'neural')
+            timedOut = 0;
+            while ~timedOut
+                [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
+                if keyIsDown && keyCode(my_key.escape)
+                    ShowCursor;
+                    const.forceQuit=1;
+                    const.expStop=1;
+                elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
+                    responseTime = vbl-startTime;
+                end
+                % count from the stimulus onset (time_to_start)
+                time_to_count = GetSecs;
+                if time_to_count > t2wait + time_to_start
+                    timedOut = 1;
+                    responded = 1; % no response is registered, but the experiment needs to move on
+                end
+            end
+
+        elseif strcmp(const.expPar, 'behavioral')
+            % check for keyboard input
+            [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
+            if ~keyIsDown % if finger is lifted off key do not set a time contraint
+                reset = 1;
+            elseif keyIsDown && keyCode(my_key.escape)
+                ShowCursor;
+                const.forceQuit=1;
+                const.expStop=1;
+            elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
+                responseTime = vbl-startTime;
+                responded=1;
+            elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
+                adjustedContrast = adjustedContrast+0.01;
+                reset = 0;
+                if adjustedContrast>1
+                    adjustedContrast=1;
+                end
+            elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.leftArrow)) && reset
+                adjustedContrast = adjustedContrast-0.01;
+                reset = 0;
+                if adjustedContrast<0
+                    adjustedContrast=0;
+                end
+            end
+        end
         if const.makemovie && mod(frameCounter,15) == 0
             M = Screen('GetImage', const.window,[],[],0,3);
             imwrite(M,fullfile(const.moviefolder, [num2str(movieframe_n),'.png']));
