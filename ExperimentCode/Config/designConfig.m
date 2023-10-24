@@ -45,6 +45,16 @@ trialsequenceMAT = trialsequenceMAT(randperm(length(trialsequenceMAT)), :);
 
 expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'targetContrasts', 'horizontalLoc'});
 
+%letter fixation task params:
+const.pedestal_letter = "M";
+const.target_letter = "K";
+const.proportion_targets = 0.25;
+const.num_targets = size(trialsequenceMAT, 1) * const.proportion_targets;
+const.num_pedestals = size(trialsequenceMAT, 1) - (size(trialsequenceMAT, 1) * const.proportion_targets);
+temp_letter_seq = [repmat(const.target_letter,1, const.num_targets), repmat(const.pedestal_letter,1, const.num_pedestals, 1)];
+randomized_indices = randsample(1:size(trialsequenceMAT, 1), size(trialsequenceMAT, 1));
+expDes.letter_detection_sequence = temp_letter_seq(randomized_indices);
+
 % Experimental matrix
 trialIDs = 1:expDes.nb_trials;
 expDes.trialMat = [trialIDs', trialsequenceMAT];
@@ -57,6 +67,8 @@ if strcmp(const.expPar, 'behavioral')
 elseif strcmp(const.expPar, 'neural') 
     expDes.startingContrasts = expDes.trialMat(:,2)';
 end
+
+
 
 %% Experiental timing settings
 
