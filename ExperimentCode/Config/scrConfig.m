@@ -37,6 +37,7 @@ const.lightgray =   [  0.75,   0.75,   0.75 ];
 [scrX_mm, scrY_mm] = Screen('DisplaySize',scr.scr_num);
 scr.scrX_cm = scrX_mm/10; scr.scrY_cm = scrY_mm/10;
 
+% fix: second time loading in (previously in dirSaveFile)
 filepath = fullfile(sursuppRootPath, 'parameters.tsv');
 params = readtable(filepath, "FileType","text",'Delimiter', '\t');
 
@@ -45,7 +46,6 @@ scr.scrViewingDist_cm = params.scrDist; % load in viewing distance
 % save other params to const struct
 const.gapRatio = params.gapRatio; 
 const.stimType = params.stimType;
-const.expPar = params.expPar;
 
 % parse polar angle list from tsv file
 polarangles = extractBetween(params.stimPaLocs{1}, '[',']');

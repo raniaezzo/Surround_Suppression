@@ -39,6 +39,7 @@ vbl = Screen('Flip',const.window);
 t0=vbl; const.t0 = t0;
 expDes.trial_onsets = nan(1,(expDes.nb_trials));
 expDes.stimulus_onsets = nan(1,(expDes.nb_trials));
+blockTracker = 1;
 
 % initialize response vector for neural paradigm (letter detection)
 if strcmp(const.expPar, 'neural')
@@ -47,6 +48,16 @@ end
     
 for ni=1:expDes.nb_trials
 
+    % for breaks
+    if mod(ni,expDes.ApprxTrialperBlock)==0 && ni ~= 0 && ni ~= expDes.nb_trials
+        blockbreak = sprintf(' Completed %s/%s blocks. Press [space] to continue. ',num2str(blockTracker), num2str(expDes.NumBlocks));
+        textExp.blockbreak = {blockbreak};
+        keyCode = instructions(scr,const,my_key,textExp.blockbreak);
+        if keyCode(my_key.escape), return, end
+        FlushEvents('KeyDown');
+        blockTracker = blockTracker+1;
+    end
+    
     fprintf('TRIAL %i ... ', ni)
 
     if ~const.expStop

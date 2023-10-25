@@ -19,9 +19,14 @@ else
     const.subjID = 'XX';
 end
 
+% find out which paradigm we are running
+filepath = fullfile(sursuppRootPath, 'parameters.tsv');
+params = readtable(filepath, "FileType","text",'Delimiter', '\t');
+const.expPar = params.expPar{1};
+
 % Subject Directory
 MainDirectory = sursuppRootPath;
-datadir = fullfile(MainDirectory, 'Data');
+datadir = fullfile(MainDirectory, 'Data', const.expPar);
 const.subjDir = fullfile(datadir,const.subjID);
 const.blockLog = fullfile(datadir,const.subjID, 'blocklog.txt');
 

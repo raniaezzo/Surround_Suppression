@@ -18,7 +18,7 @@ expDes.rng = rng(const.block);
 
 %% Experimental sequence
 
-expDes.nb_repeat = 2; % number of unique repeats (for a contrast at a location)
+expDes.nb_repeat = 10; % number of unique repeats (for a contrast at a location)
 
 expDes.locations = const.paLocs;
 
@@ -67,6 +67,8 @@ end
 expDes.stimDur_s  = 0.5;   % 0.5 sec stimulus duration % based on Hermes et al., 2014
 expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
 expDes.block_dur = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
+expDes.NumBlocks = 5;
+expDes.ApprxTrialperBlock = round(expDes.nb_trials/expDes.NumBlocks);
 
 %% Saving procedure
 

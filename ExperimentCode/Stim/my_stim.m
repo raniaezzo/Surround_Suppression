@@ -162,8 +162,10 @@ while ~(const.expStop) && ~(responded)
 
 end
 
-% save submitted contrast:
-expDes.response(trialID, 1) = adjustedContrast;
-expDes.response(trialID, 2) = responseTime;
+% save submitted contrast & RT if behavioral condition:
+if ~ strcmp(const.expPar, 'neural')
+    expDes.response(trialID, 1) = adjustedContrast;
+    expDes.response(trialID, 2) = responseTime;
+end
 
 end
