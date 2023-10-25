@@ -14,7 +14,7 @@ function my_fixation(scr,const,color)
 % ----------------------------------------------------------------------
 
 % Draw the fixation point
+
 Screen('DrawDots', const.window, scr.windCenter_px, ...
     const.fixationRadius_px, color, [], 2);
 
-end
