@@ -80,7 +80,6 @@ contrasts = strsplit(contrasts{1},',');
 const.targetContrast = arrayfun(@(x) str2double(contrasts{x}),1:length(contrasts));
 
 [scr.frameRate] = Screen('FrameRate', scr.scr_num);
-scr.frame_duration =1/scr.frameRate; 
 
 % find screen details
 if ~computerDetails.windows
@@ -104,6 +103,7 @@ if ~scr.frameRate
     disp('PTB could not detect framerate. Setting default to 60 hz.')
     scr.frameRate = 60;
 end
+scr.frame_duration =1/scr.frameRate; 
 
 if strcmp(scr.experimenter, 'Unknown') % default
     disp('Defaulting to first keyboard detected. This might work :)') 
