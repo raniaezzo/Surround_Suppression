@@ -161,6 +161,24 @@ for li=1:length(xPos)
     const.rectPointsSurr{li} = create_dstRect(const.visiblesize_surr, xPos(li), yPos(li), scr.windCenter_px);
 end
 
+% letter detection task
+const.pedestal_letter = "M";
+const.target_letter = "K";
+const.proportion_targets = 0.25;
+const.letter_total_frames = round(expDes.block_dur/scr.frame_duration);
+const.num_targets =  12; % undecided for now
+const.init_onset = 1:const.letter_total_frames/const.num_targets:const.letter_total_frames;
+const.min_jitter = round(1/scr.frame_duration); % in seconds
+const.max_jitter = round(2/scr.frame_duration);
+const.jitter_in_frames = randi([const.min_jitter const.max_jitter], 1, const.num_targets-1);
+const.letter_dur = 0.5; 
+const.letter_dur_frames = round(const.letter_dur/scr.frame_duration);
+const.change_frames = [const.init_onset(1), const.jitter_in_frames + const.init_onset(2:end)];
+const.letter_seq = zeros((const.letter_total_frames), 1);
+
+for lt_fr = 1:const.num_targets
+    const.letter_seq(const.change_frames(1,lt_fr):const.change_frames(1,lt_fr)+const.letter_dur_frames) = 1;
+end
 
 %% Saving procedure :
 

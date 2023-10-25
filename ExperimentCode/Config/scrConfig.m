@@ -80,6 +80,7 @@ contrasts = strsplit(contrasts{1},',');
 const.targetContrast = arrayfun(@(x) str2double(contrasts{x}),1:length(contrasts));
 
 [scr.frameRate] = Screen('FrameRate', scr.scr_num);
+scr.frame_duration =1/scr.frameRate; 
 
 % find screen details
 if ~computerDetails.windows
