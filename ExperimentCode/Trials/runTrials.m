@@ -23,10 +23,10 @@ if const.DEBUG
     HideCursor(scr.scr_num);
 end
 
-keyCode = instructions(scr,const,my_key,textExp.instruction);
+%keyCode = instructions(scr,const,my_key,textExp.instruction);
 tic
 
-if keyCode(my_key.escape), return, end
+%if keyCode(my_key.escape), return, end
 
 FlushEvents('KeyDown');
 
@@ -41,12 +41,15 @@ expDes.trial_onsets = nan(1,(expDes.nb_trials));
 expDes.stimulus_onsets = nan(1,(expDes.nb_trials));
     
 for ni=1:expDes.nb_trials
-    
+
     fprintf('TRIAL %i ... ', ni)
 
     if ~const.expStop
-        expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
-        [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
+        if strcmp(const.expPar, 'behavioral')
+            expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
+            [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
+        end
+
         expDes.stimulus_onsets(ni) = vbl-t0; % log the onset of each stimulus
         [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, ni, vbl);
     end

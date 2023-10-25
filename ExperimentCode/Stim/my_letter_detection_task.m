@@ -8,8 +8,6 @@ Screen('Preference', 'TextAntiAliasing',1);
 Screen('TextSize',const.window, const.text_size);
 Screen ('TextFont', const.window, const.text_font);
 
-sizeT = size(text);
-lines = sizeT(1)+2;
 bound = Screen('TextBounds',const.window,text{1,:});
 
 Screen('DrawText',const.window,text{1,:},x_mid-bound(3)/2,y_mid, color);
