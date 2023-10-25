@@ -23,10 +23,10 @@ if const.DEBUG
     HideCursor(scr.scr_num);
 end
 
-%keyCode = instructions(scr,const,my_key,textExp.instruction);
+keyCode = instructions(scr,const,my_key,textExp.instruction);
 tic
 
-%if keyCode(my_key.escape), return, end
+if keyCode(my_key.escape), return, end
 
 FlushEvents('KeyDown');
 
