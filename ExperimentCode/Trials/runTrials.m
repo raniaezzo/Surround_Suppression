@@ -36,24 +36,26 @@ const.expStop = 0;
 const.forceQuit = 0;
 
 vbl = Screen('Flip',const.window);
-t0=vbl;
+t0=vbl; const.t0 = t0;
 expDes.trial_onsets = nan(1,(expDes.nb_trials));
 expDes.stimulus_onsets = nan(1,(expDes.nb_trials));
+
+% initialize response vector for neural paradigm (letter detection)
+if strcmp(const.expPar, 'neural')
+    expDes.letterResponse = nan(length(const.letter_seq),1);
+end
     
 for ni=1:expDes.nb_trials
 
     fprintf('TRIAL %i ... ', ni)
 
     if ~const.expStop
-        if strcmp(const.expPar, 'behavioral')
-            expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
-            [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
-        end
+        expDes.trial_onsets(ni) = vbl-t0; % log the onset of each trial
+        [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl);
 
         expDes.stimulus_onsets(ni) = vbl-t0; % log the onset of each stimulus
         [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, ni, vbl);
     end
 end
-
 
 end

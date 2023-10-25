@@ -16,14 +16,6 @@ dstRect_surround_L = const.rectPointsSurr{2};
 dstRect_R = const.rectPoints{1};
 dstRect_L = const.rectPoints{2};
 
-%xDist = const.stimEccpix; yDist = 0;
-
-%dstRect_R = create_dstRect(const.visiblesize, xDist, yDist, scr, 1); % right side
-%dstRect_L = create_dstRect(const.visiblesize, xDist, yDist, scr, 0); % left side
-
-%dstRect_surround_R = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 1); % right side
-%dstRect_surround_L = create_dstRect(const.visiblesize_surr, xDist, yDist, scr, 0); % left side
-
 waitframes = 1;
 startTime = vbl;
 
@@ -35,21 +27,17 @@ movieframe_n = 1;
 
 frameCounter_init = frameCounter;
 
-% stimulus timing:
-t2wait = 0.5; % based on Hermes et al., 2014
-
 % Animationloop:
-count_fr = 1;
-
-if const.letter_seq(1) == 1
-    trialLetterString = const.target_letter;
-else
-    trialLetterString = const.pedestal;
-end
-
 while ~(const.expStop) && ~(responded)
-
+    
     if ~const.expStop
+        
+        % for letter detection
+        if const.letter_seq(frameCounter) == 1
+            trialLetterString = const.target_letter;
+        else
+            trialLetterString = const.pedestal_letter;
+        end
 
         if mod((frameCounter-frameCounter_init), flicker_time*(scr.frameRate)) == 0
             phasenow = phasenow*flipphase;
@@ -112,44 +100,31 @@ while ~(const.expStop) && ~(responded)
             Screen('DrawTexture', const.window, const.gapTexture, [], dstRect_surround_L, [], [], [], [], [], []);
         end
 
+        % Draw fixation regardless
+        my_fixation(scr,const,const.black)
+        
         % Draw stimuli here, better at the start of the drawing loop
         if strcmp(const.expPar, 'neural')
             my_letter_detection_task(scr, const, const.white, trialLetterString)
-        elseif strcmp(const.expPar, 'behavioral')
-            my_fixation(scr,const,const.black)
         end
 
         Screen('DrawingFinished',const.window); % small ptb optimisation
-        time_to_start = GetSecs;
         vbl = Screen('Flip',const.window, vbl + (waitframes - 0.5) * scr.ifi);
-        count_fr = count_fr + 1;
-        if const.letter_seq(count_fr) == 1
-            trialLetterString = const.target_letter;
-        else
-            trialLetterString = const.pedestal;
-        end
-        if strcmp(const.expPar, 'neural')
-            timedOut = 0;
-            while ~timedOut
-                [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
-                if keyIsDown && keyCode(my_key.escape)
-                    ShowCursor;
-                    const.forceQuit=1;
-                    const.expStop=1;
-                elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
-                    responseTime = vbl-startTime;
-                end
-                % count from the stimulus onset (time_to_start)
-                time_to_count = GetSecs;
-                if time_to_count > t2wait + time_to_start
-                    timedOut = 1;
-                    responded = 1; % no response is registered, but the experiment needs to move on
-                end
+        
+        
+        % check for keyboard input
+        [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
+        if keyIsDown && keyCode(my_key.escape)
+            ShowCursor;
+            const.forceQuit=1;
+            const.expStop=1;
+        elseif strcmp(const.expPar, 'neural')
+            if vbl-startTime >= expDes.stimDur_s
+                responded = 1; % no response is registered, but the experiment needs to move on
+            elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
+                responseTime = vbl-startTime;
             end
-
         elseif strcmp(const.expPar, 'behavioral')
-            % check for keyboard input
-            [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
             if ~keyIsDown % if finger is lifted off key do not set a time contraint
                 reset = 1;
             elseif keyIsDown && keyCode(my_key.escape)
@@ -157,8 +132,7 @@ while ~(const.expStop) && ~(responded)
                 const.forceQuit=1;
                 const.expStop=1;
             elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
-                responseTime = vbl-startTime;
-                responded=1;
+                expDes.letterResponse(frameCounter) = 1; % log from the start of experiment (for letter detection)
             elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
                 adjustedContrast = adjustedContrast+0.01;
                 reset = 0;
@@ -173,6 +147,7 @@ while ~(const.expStop) && ~(responded)
                 end
             end
         end
+        
         if const.makemovie && mod(frameCounter,15) == 0
             M = Screen('GetImage', const.window,[],[],0,3);
             imwrite(M,fullfile(const.moviefolder, [num2str(movieframe_n),'.png']));
@@ -190,16 +165,5 @@ end
 % save submitted contrast:
 expDes.response(trialID, 1) = adjustedContrast;
 expDes.response(trialID, 2) = responseTime;
-
-%%
-
-% function dstRect = create_dstRect(visiblesize, xDist, yDist, scr, rightside)
-%     if ~rightside
-%         xDist = -xDist;
-%     end
-%     xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
-%     yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part..
-%     dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
-% end
 
 end

@@ -64,18 +64,9 @@ end
 
 %% Experiental timing settings
 
-expDes.stimDur_s  = 1;   % 0.5 sec stimulus duration
+expDes.stimDur_s  = 0.5;   % 0.5 sec stimulus duration % based on Hermes et al., 2014
 expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
 expDes.block_dur = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
-
-%expDes.stimDur_nFrames  =     round(expDes.stimDur_s/scr.ifi); % # frames
-%expDes.itiDur_nFrames  =      round(expDes.itiDur_s/scr.ifi); % # frames
-
-%expDes.totalframes = expDes.stimDur_nFrames*expDes.nb_trials+ ...
-%    expDes.itiDur_nFrames*expDes.nb_trials;
- 
-%expDes.TrialsStart_frame = 1;
-%expDes.TrialsEnd_frame = expDes.totalframes;
 
 %% Saving procedure
 
