@@ -9,7 +9,6 @@ testContrast = expDes.trialMat(trialID,2); % contrast value
 adjustedContrast = expDes.startingContrasts(1,trialID);
 
 % for the letter detection task:
-trialLetterString = expDes.letter_detection_sequence(trialID); 
 % eccentricity
 dstRect_surround_R = const.rectPointsSurr{1};
 dstRect_surround_L = const.rectPointsSurr{2};
@@ -28,7 +27,7 @@ dstRect_L = const.rectPoints{2};
 waitframes = 1;
 startTime = vbl;
 
-flicker_time = 1/const.flicker_hz; 
+flicker_time = 1/const.flicker_hz;
 flipphase = -1; phasenow = 1;
 responded=0;
 responseTime = NaN;
@@ -37,23 +36,31 @@ movieframe_n = 1;
 frameCounter_init = frameCounter;
 
 % stimulus timing:
-t2wait = 0.5; % based on Hermes et al., 2014 
+t2wait = 0.5; % based on Hermes et al., 2014
 
 % Animationloop:
+count_fr = 1;
+
+if const.letter_seq(1) == 1
+    trialLetterString = const.target_letter;
+else
+    trialLetterString = const.pedestal;
+end
+
 while ~(const.expStop) && ~(responded)
 
-    if ~const.expStop  
-         
+    if ~const.expStop
+
         if mod((frameCounter-frameCounter_init), flicker_time*(scr.frameRate)) == 0
             phasenow = phasenow*flipphase;
         end
-        
+
         if testLocation == const.paIdx1 % right
             contrast_R = testContrast; contrast_L = adjustedContrast;
         elseif testLocation == const.paIdx2 % left
             contrast_R = adjustedContrast; contrast_L = testContrast;
         end
-        
+
         if strcmp(expDes.stimulus, 'perlinNoise')
             auxParamsR = [contrast_R, iR+((90)*phasenow), const.scalar4noiseTarget, 0];
             auxParamsL = [contrast_L, iL+((90)*phasenow), const.scalar4noiseTarget, 0];
@@ -71,19 +78,19 @@ while ~(const.expStop) && ~(responded)
                 auxParamsS = [iL+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
             end
         end
-        
+
         % Set the right blend function for drawing the gabors
         Screen('BlendFunction', const.window, 'GL_ONE', 'GL_ZERO');
-        
+
         % surround
         if testLocation == const.paIdx1
-           Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
-               [], [], [], [], [], auxParamsS);
+            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_R, const.maporientation(const.stimOri), ...
+                [], [], [], [], [], auxParamsS);
         elseif testLocation == const.paIdx2
-           Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
-               [], [], [], [], [], auxParamsS);
+            Screen('DrawTexture', const.window, const.surroundwavetex, [], dstRect_surround_L, const.maporientation(const.stimOri), ...
+                [], [], [], [], [], auxParamsS);
         end
-        
+
         %if phasenow - should i just present counterphase this way?
         % Draw grating texture, rotated by "angle":
         Screen('DrawTexture', const.window, const.squarewavetex, [], dstRect_R, const.maporientation(const.stimOri), ...
@@ -107,7 +114,7 @@ while ~(const.expStop) && ~(responded)
 
         % Draw stimuli here, better at the start of the drawing loop
         if strcmp(const.expPar, 'neural')
-            my_letter_detection_task(scr, const, const.black, trialLetterString)
+            my_letter_detection_task(scr, const, const.white, trialLetterString)
         elseif strcmp(const.expPar, 'behavioral')
             my_fixation(scr,const,const.black)
         end
@@ -115,7 +122,12 @@ while ~(const.expStop) && ~(responded)
         Screen('DrawingFinished',const.window); % small ptb optimisation
         time_to_start = GetSecs;
         vbl = Screen('Flip',const.window, vbl + (waitframes - 0.5) * scr.ifi);
-
+        count_fr = count_fr + 1;
+        if const.letter_seq(count_fr) == 1
+            trialLetterString = const.target_letter;
+        else
+            trialLetterString = const.pedestal;
+        end
         if strcmp(const.expPar, 'neural')
             timedOut = 0;
             while ~timedOut
@@ -166,13 +178,13 @@ while ~(const.expStop) && ~(responded)
             imwrite(M,fullfile(const.moviefolder, [num2str(movieframe_n),'.png']));
             movieframe_n = movieframe_n + 1;
         end
-        
+
         % FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
     else
         break
     end
-     
+
 end
 
 % save submitted contrast:
@@ -186,7 +198,7 @@ expDes.response(trialID, 2) = responseTime;
 %         xDist = -xDist;
 %     end
 %     xDist = scr.windCenter_px(1)+xDist-(visiblesize/2); % center + (+- distance added in pixels)
-%     yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part.. 
+%     yDist = scr.windCenter_px(2)+yDist-(visiblesize/2);  % check with -(vis part..
 %     dstRect=[xDist yDist visiblesize+xDist visiblesize+yDist];
 % end
 
