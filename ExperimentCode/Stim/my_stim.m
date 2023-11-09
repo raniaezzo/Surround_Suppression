@@ -6,6 +6,7 @@ iR = const.phaseLine(2,trialID);
 % determine location of the Sm (isolated) and St (embedded)
 testLocation = expDes.trialMat(trialID,3); % RH or LH for embedded stimulus
 testContrast = expDes.trialMat(trialID,2); % contrast value
+surroundContrast = expDes.trialMat(trialID,4); % surround contrast levels added
 adjustedContrast = expDes.startingContrasts(1,trialID);
 
 % for the letter detection task:
@@ -53,17 +54,17 @@ while ~(const.expStop) && ~(responded)
             auxParamsR = [contrast_R, iR+((90)*phasenow), const.scalar4noiseTarget, 0];
             auxParamsL = [contrast_L, iL+((90)*phasenow), const.scalar4noiseTarget, 0];
             if testLocation == const.paIdx1
-                auxParamsS = [const.contrast_surround, iR+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
+                auxParamsS = [surroundContrast, iR+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
             elseif testLocation == const.paIdx2
-                auxParamsS = [const.contrast_surround, iL+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
+                auxParamsS = [surroundContrast, iL+((90)*phasenow*-1), const.scalar4noiseSurround, 0];
             end
         elseif strcmp(expDes.stimulus, 'grating')
             auxParamsR = [iR+((90)*phasenow), const.stimSF_cpp, contrast_R, 0];
             auxParamsL = [iL+((90)*phasenow), const.stimSF_cpp, contrast_L, 0];
             if testLocation == const.paIdx1
-                auxParamsS = [iR+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
+                auxParamsS = [iR+((90)*phasenow*-1), const.stimSF_cpp, surroundContrast, 0];
             elseif testLocation == const.paIdx2
-                auxParamsS = [iL+((90)*phasenow*-1), const.stimSF_cpp, const.contrast_surround, 0];
+                auxParamsS = [iL+((90)*phasenow*-1), const.stimSF_cpp, surroundContrast, 0];
             end
         end
 

@@ -29,13 +29,16 @@ elseif strcmp(const.stimType, 'grating')
     expDes.stimulus = 'grating';
 end
 
-expDes.contrasts = const.targetContrast';
+expDes.center_contrasts = const.targetContrast';
+expDes.surround_contrasts = const.surroundContrast';
 %const.contrast = .5; % what to do with this?
 
 expDes.mainStimTypes = [];
-for i=1:numel(expDes.locations)
-    tmp = [expDes.contrasts, ones(length(expDes.contrasts),1)*expDes.locations(i)];
-    expDes.mainStimTypes = [expDes.mainStimTypes; tmp];
+for j = 1:length(expDes.surround_contrasts)
+    for i=1:numel(expDes.locations)
+        tmp = [expDes.center_contrasts, ones(length(expDes.center_contrasts),1)*expDes.locations(i), ones(length(expDes.center_contrasts),1)*expDes.surround_contrasts(j)];
+        expDes.mainStimTypes = [expDes.mainStimTypes; tmp];
+    end
 end
 
 trialsequenceMAT = repmat(expDes.mainStimTypes, expDes.nb_repeat, 1);
@@ -43,7 +46,7 @@ trialsequenceMAT = trialsequenceMAT(randperm(length(trialsequenceMAT)), :);
 
 [expDes.nb_trials, ~] = size(trialsequenceMAT);
 
-expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'targetContrasts', 'horizontalLoc'});
+expDes.mainStimTypes = array2table(expDes.mainStimTypes,'VariableNames',{'targetContrasts', 'horizontalLoc', 'surroundContrasts'});
 
 %letter fixation task params:
 

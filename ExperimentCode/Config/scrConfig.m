@@ -75,9 +75,13 @@ if strcmp(const.expPar, 'behavioral')
 end
 
 % parse contrast list from tsv file
-contrasts = extractBetween(params.targetContrast{1}, '[',']');
-contrasts = strsplit(contrasts{1},',');
-const.targetContrast = arrayfun(@(x) str2double(contrasts{x}),1:length(contrasts));
+centerContrasts = extractBetween(params.targetContrast{1}, '[',']');
+centerContrasts = strsplit(centerContrasts{1},',');
+const.targetContrast = arrayfun(@(x) str2double(centerContrasts{x}),1:length(centerContrasts));
+
+surroundContrasts = extractBetween(params.surroundContrast{1}, '[',']');
+surroundContrasts = strsplit(surroundContrasts{1},',');
+const.surroundContrast = arrayfun(@(x) str2double(surroundContrasts{x}),1:length(surroundContrasts));
 
 [scr.frameRate] = Screen('FrameRate', scr.scr_num);
 
@@ -182,8 +186,11 @@ end
 
 
 %% Fixation Properties
-
-const.fixationRadius_px = 0.01*scr.windY_px;
+if strcmp(const.expPar, 'behavioral')
+    const.fixationRadius_px = 0.01*scr.windY_px;
+elseif strcmp(const.expPar, 'neural')
+    const.fixationRadius_px = 0.005*scr.windY_px;
+end
 const.fixationRadius_deg = pix2vaDeg(const.fixationRadius_px, scr);
 
 %%
