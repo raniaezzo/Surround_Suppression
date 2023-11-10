@@ -6,10 +6,9 @@ sca; Screen('CloseAll');
 clear functions; clear mex;
 close all; clear all; clc;
 rng('default');
-
+KbName('UnifyKeyNames');
 Screen('Preference', 'TextRenderer', 0);
-KbName('UnifyKeyNames')
-%PsychDebugWindowConfiguration(0, 0.5);
+%PsychDebugWindowConfiguration(0, 0.3);
 % Initialization
 warning('off');        % do not print warnings
 const.DEBUG = 0;       % skips subject details / data saving

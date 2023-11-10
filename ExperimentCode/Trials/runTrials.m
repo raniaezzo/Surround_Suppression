@@ -43,7 +43,7 @@ blockTracker = 1;
 
 % initialize response vector for neural paradigm (letter detection)
 if strcmp(const.expPar, 'neural')
-    expDes.letterResponse = nan(length(const.letter_seq),1);
+    expDes.letterResponse = zeros(length(const.letter_seq),1);
 end
     
 for ni=1:expDes.nb_trials

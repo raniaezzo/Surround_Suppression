@@ -69,9 +69,10 @@ end
 
 expDes.stimDur_s  = 0.5;   % 0.5 sec stimulus duration % based on Hermes et al., 2014
 expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
-expDes.block_dur = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
+expDes.exp_dur = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
 expDes.NumBlocks = 5;
 expDes.ApprxTrialperBlock = round(expDes.nb_trials/expDes.NumBlocks);
+expDes.block_dur = (expDes.ApprxTrialperBlock*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
 
 %% Saving procedure
 

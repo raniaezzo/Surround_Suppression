@@ -27,7 +27,6 @@ responseTime = NaN;
 movieframe_n = 1;
 
 frameCounter_init = frameCounter;
-
 % Animationloop:
 while ~(const.expStop) && ~(responded)
     
@@ -124,6 +123,7 @@ while ~(const.expStop) && ~(responded)
                 responded = 1; % no response is registered, but the experiment needs to move on
             elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
                 responseTime = vbl-startTime;
+                expDes.letterResponse(frameCounter) = 1;
             end
         elseif strcmp(const.expPar, 'behavioral')
             if ~keyIsDown % if finger is lifted off key do not set a time contraint
