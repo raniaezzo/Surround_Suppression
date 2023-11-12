@@ -23,6 +23,9 @@ const.text_font = 'Helvetica';
 
 % Time
 const.my_clock_ini = clock;
+
+% Set default to 0, but is overwritten later to 1 if Stanford PC
+const.TRIGGERCHECK = 0;
     
 %% Screen
 computerDetails = Screen('Computer');  % check computer specs
@@ -60,10 +63,16 @@ const.paIdx1 = const.paLocs(1); const.paIdx2 = const.paLocs(2);
 % 180 degrees apart.
 if length(const.paLocs) ~= 2
     error('Number of stimulus polar angle (stimPaLocs) must be two.')
-elseif any(const.paLocs<0) || any(const.paLocs>=360)
-    error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
-elseif max(const.paLocs) - min(const.paLocs) ~= 180
-    error('Polar angle positions (stimPaLocs) must be 180 degrees apart.')
+% elseif any(const.paLocs<0) || any(const.paLocs>=360)
+%     error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
+% elseif max(const.paLocs) - min(const.paLocs) ~= 180
+%     error('Polar angle positions (stimPaLocs) must be 180 degrees apart.')
+else
+    rh_PA = const.paLocs(const.paLocs < 90 | const.paLocs > 270);
+    lh_PA = const.paLocs(const.paLocs > 90 & const.paLocs < 270);
+    if isempty(lh_PA) || isempty(rh_PA)
+        error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
+    end
 end
 
 % this warns experimenter that this is the behavioral paradigm that
@@ -99,7 +108,13 @@ if ~computerDetails.windows
             scr.experimenter = 'Unknown';
     end
 else    % PC (field names are different)
-    scr.experimenter = 'Unknown';
+    switch computerDetails.system
+        case 'NT-11.0.9200 - '
+            scr.experimenter = 'StanfordPC';
+            const.TRIGGERCHECK = 1;
+        otherwise
+            scr.experimenter = 'Unknown';
+    end
 end
 
 % try to detect framerate: if not, set to a default and print warning..

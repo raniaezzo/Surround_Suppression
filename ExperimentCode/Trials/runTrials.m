@@ -35,7 +35,18 @@ frameCounter=1;
 const.expStop = 0;
 const.forceQuit = 0;
 
+if const.TRIGGERCHECK
+    RTBox('clear');
+end
+
 vbl = Screen('Flip',const.window);
+
+if const.TRIGGERCHECK
+    % Add every time you want to send a trigger (TTL pulse) 
+    %  ***** RTBOX *******
+    RTBox('TTL', 255);
+end
+
 t0=vbl; const.t0 = t0;
 expDes.trial_onsets = nan(1,(expDes.nb_trials));
 expDes.stimulus_onsets = nan(1,(expDes.nb_trials));

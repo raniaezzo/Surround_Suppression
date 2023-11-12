@@ -18,6 +18,16 @@ function main(const)
 % Screen configuration :
 [scr, const] = scrConfig(const);
 
+if const.TRIGGERCHECK
+    %% RTBox setup
+    % RTBox('fake',1); % set RTBox to fake mode: use keyboard to simulate
+    RTBox('clear'); % Open RT box if hasn't
+    %RTBox('ButtonNames', {'left' 'left' 'right' 'right'}); % make first 2 and last 2 equivalent
+    %RTBox(inf); % wait for any button press
+    RTBox('TTLWidth', .02);
+    RTBox('enable','light');
+end
+
 % Keyboard configuration :
 [my_key] = keyConfig(const);
 
