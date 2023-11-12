@@ -25,7 +25,13 @@ end
 
 my_key.escape       = KbName('ESCAPE');
 my_key.space        = KbName('Space');
-my_key.rightArrow   = KbName('RightArrow');
-my_key.leftArrow    = KbName('LeftArrow');
+
+if strcmp(scr.experimenter, 'StanfordPC')
+    my_key.rightArrow   = KbName('Right'); % check with them what occurs with code below and create more general solution
+    my_key.leftArrow    = KbName('Left');
+else
+    my_key.rightArrow   = KbName('RightArrow');
+    my_key.leftArrow    = KbName('LeftArrow');
+end
 
 end
