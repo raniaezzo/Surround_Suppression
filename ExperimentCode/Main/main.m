@@ -29,7 +29,7 @@ if const.TRIGGERCHECK
 end
 
 % Keyboard configuration :
-[my_key] = keyConfig(const);
+[my_key] = keyConfig(const, scr);
 
 % Experimental design configuration :
 [expDes] = designConfig(scr,const);

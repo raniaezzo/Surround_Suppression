@@ -55,23 +55,59 @@ polarangles = extractBetween(params.stimPaLocs{1}, '[',']');
 polarangles = strsplit(polarangles{1},',');
 params.stimPaLocs = arrayfun(@(x) str2double(polarangles{x}),1:length(polarangles));
 
-const.paLocs = params.stimPaLocs';
-const.paLocs = sort(const.paLocs); % order from least to greatest
-const.paIdx1 = const.paLocs(1); const.paIdx2 = const.paLocs(2);
+% these are the polar angles read in from tsv parameter file (1-2 values)
+const.paLocTarget = params.stimPaLocs';
+const.paLocTarget = sort(const.paLocTarget); % order from least to greatest
 
-% check that paLocs are two values between 0-360 and that the values are
-% 180 degrees apart.
-if length(const.paLocs) ~= 2
-    error('Number of stimulus polar angle (stimPaLocs) must be two.')
-% elseif any(const.paLocs<0) || any(const.paLocs>=360)
-%     error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
-% elseif max(const.paLocs) - min(const.paLocs) ~= 180
-%     error('Polar angle positions (stimPaLocs) must be 180 degrees apart.')
-else
+% if tsv parameter input is NOT 1-2 values print error:
+if ~ (0 < length(const.paLocTarget) && length(const.paLocTarget) <= 2)
+    error('Number of stimulus polar angle (stimPaLocs) in parameters.tsv must rangle from 1-2.')
+else % otherwise
+    % check that all values are valid (between 0 and 360)
+    if any(const.paLocTarget<0) || any(const.paLocTarget>=360)
+        error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
+    end
+    
+    % compute the symmetric value relative to the vertical meridian
+    if const.paLocTarget(1) < 180
+        addedTargetLoc = 90 + (90 - const.paLocTarget(1));
+    elseif const.paLocTarget >= 180
+        addedTargetLoc = 270 + (270 - const.paLocTarget(1));
+        if addedTargetLoc >= 360 % make sure a 360 value is interpretted as 0
+            addedTargetLoc = addedTargetLoc - 360;
+        end
+    end
+    
+    if length(const.paLocTarget) == 2 % if 2 inputs:
+        % these values must be equidistant.
+        if const.paLocTarget == addedTargetLoc
+            const.paLocs = const.paLocTarget;
+        else
+            error('If two polar angle values (stimPaLocs) are given in parameters.tsv, they must be the same angular distance from vertical meridian.')
+        end
+        
+    elseif length(const.paLocTarget) == 1 % if 1 input:
+        % put add the second value that is mirror symmetric w/ respect to
+        % vertical meridian
+        const.paLocs = [const.paLocTarget, addedTargetLoc];
+    end
+
+    % at this point, check that there is one polar angle location per
+    % hemifield
+    
+     % EXTRA CHECKS BELOW: Not necessary, but keeping in case:
+     % log all existing values in each hemifield (LHemi, RHemi)
     rh_PA = const.paLocs(const.paLocs < 90 | const.paLocs > 270);
     lh_PA = const.paLocs(const.paLocs > 90 & const.paLocs < 270);
+    
     if isempty(lh_PA) || isempty(rh_PA)
         error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
+    end  
+    
+    % final check: that paLocs are two values between 0-360
+    if length(const.paLocs) ~= 2
+        error('Number of stimulus polar angle (stimPaLocs) must be two.')
+
     end
 end
 
@@ -161,18 +197,62 @@ else
     [~] = Screen('Preference', 'SkipSyncTests', 1); % skip timing checks for debugging
 end
 
-% check if lawful parameter size relative to screen
+% CHECK DIMENSIONS PRIOR TO EXPERIMENT:
+
+[xCheck,yCheck] = pol2cart(deg2rad(const.paLocs(1)),const.stimEccpix);
+
+% CHECK IF LAWFUL PARAMETERS OF STIMULI (SURROUND SHOULD NEVER CROSS
+% VERTICAL MERIDIAN) - this is the one check that is automatically fixed if
+% not met. It is attempted to be fixed by placing stimuli diagonally opposite to one
+% another.
+
+% check if stimulus crosses vertical meridian
+if const.surroundRadiuspix >= abs(xCheck) % if surround radius (px) is larger than horizontal distance from center
+    if length(const.paLocTarget) == 1
+        disp('Stimuli are too close to the vertical meridian, changing to diagonal configuration.')
+        % ensure the two pa Locs are 180 degrees apart: 
+        %if max(const.paLocs) - min(const.paLocs) ~= 180
+        %     error('Polar angle positions (stimPaLocs) must be 180 degrees apart.')
+        % end
+        addedTarget = const.paLocTarget + 180;
+        if addedTarget >= 360
+            addedTarget = addedTarget - 360;
+        end
+        
+        const.paLocs = [const.paLocTarget, addedTarget];
+        const.configVerticalAsymmetry = 0; % if not vertical, assume diagonal
+        
+    else
+        error('Stimuli are too close to the vertical meridian to use default mirror symmetry. Code can attempt a fix if you input only one value only in the parameters tsv file.')
+    end
+else
+    const.configVerticalAsymmetry = 1; % stimuli are symmetrically displayed relative to vertical meridian
+end
+
+% these are the finalized polar angles
+const.paLocs = sort(const.paLocs); % order from least to greatest
+const.paIdx1 = const.paLocs(1); const.paIdx2 = const.paLocs(2);
+
+% CHECK IF LAWFUL PARAMETERS RELATIVE TO SCREEN
+
+% this ensures the surround will not go past the fixation point
 if const.surroundRadiuspix >= const.stimEccpix && ~const.scale2screen
     error('Surround radius must NOT exceed stimulus eccentricity.')
     %const.scale2screen = 1;
 end
+
+% this ensures the surround will not be cut off
 if const.surroundRadiuspix >= scr.windY_px/2 && ~const.scale2screen
     error('Surround radius must NOT exceed half the screen height.')
     %const.scale2screen = 1;
 end
-if const.surroundRadiuspix+const.stimEccpix >= scr.windX_px/2 && ~const.scale2screen
-    error('Surround radius + eccentricity must NOT exceed the screen width.')
-    %const.scale2screen = 1;
+
+% check x and y distances (based on target eccentricity) + surround do not
+% exceed screen
+if const.surroundRadiuspix+xCheck >= scr.windX_px/2 && ~const.scale2screen
+    error('Surround radius + xDist must NOT exceed the screen width. Adjust stim size or eccentricity.')
+elseif const.surroundRadiuspix+yCheck >= scr.windY_px/2 && ~const.scale2screen
+    error('Surround radius + yDist must NOT exceed the screen width. Adjust stim size or eccentricity.')
 end
 %
 
@@ -231,6 +311,17 @@ scr.vbl = Screen('Flip', const.window);
 scr.ifi = Screen('GetFlipInterval', const.window);
 
 %% load in gamma table for appropriate contrast
+
+% this saves path, the values are loaded in later (in scrConfig)
+MainDirectory = sursuppRootPath;
+if strcmp(scr.experimenter, 'StanfordPC')
+    const.gammaTablePath = fullfile(MainDirectory, 'ExperimentCode', 'Config', 'gammaStanford_20231109T091813.mat');
+else
+    disp('YOUR COMPUTER IS USING AN EXAMPLE GAMMA TABLE.')
+    disp('AFTER CALIBRATING MONITOR, ADD gamma.mat PATH TO dirSaveFile.m')
+    const.gammaTablePath = fullfile(MainDirectory, 'ExperimentCode', 'Config', 'gammaExample.mat');
+end
+
 if ~const.DEBUG
     gammaVals = load(const.gammaTablePath);
     const.gammaVals = gammaVals.gamma;

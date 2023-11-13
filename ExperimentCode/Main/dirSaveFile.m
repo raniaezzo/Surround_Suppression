@@ -30,15 +30,6 @@ datadir = fullfile(MainDirectory, 'Data', const.expPar);
 const.subjDir = fullfile(datadir,const.subjID);
 const.blockLog = fullfile(datadir,const.subjID, 'blocklog.txt');
 
-% this saves path, the values are loaded in later (in scrConfig)
-if strcmp(scr.experimenter, 'StanfordPC')
-    const.gammaTablePath = fullfile(MainDirectory, 'ExperimentCode', 'Config', 'gammaStanford_20231109T091813.mat');
-else
-    disp('YOUR COMPUTER IS USING AN EXAMPLE GAMMA TABLE.')
-    disp('AFTER CALIBRATING MONITOR, ADD gamma.mat PATH TO dirSaveFile.m')
-    const.gammaTablePath = fullfile(MainDirectory, 'ExperimentCode', 'Config', 'gammaExample.mat');
-end
-
 if ~isfile(const.blockLog)
     mkdir(const.subjDir);
     const.block = 1;
