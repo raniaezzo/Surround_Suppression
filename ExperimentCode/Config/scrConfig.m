@@ -148,6 +148,7 @@ else    % PC (field names are different)
     switch computerDetails.system
         case 'NT-11.0.9200 - '
             scr.experimenter = 'StanfordPC';
+            const.keyboard = '';
             const.TRIGGERCHECK = 1;
         otherwise
             scr.experimenter = 'Unknown';
