@@ -60,7 +60,7 @@ end
 for ni=1:expDes.nb_trials
 
     % for breaks
-    if mod(ni,expDes.ApprxTrialperBlock)==0 && ni ~= 0 && ni ~= expDes.nb_trials
+    if mod(ni,expDes.ApprxTrialperBlock)==0 && ni ~= 0 && ni ~= expDes.nb_trials && ~const.expStop
         blockbreak = sprintf(' Completed %s/%s blocks. Press [space] to continue. ',num2str(blockTracker), num2str(expDes.NumBlocks));
         textExp.blockbreak = {blockbreak};
         keyCode = instructions(scr,const,my_key,textExp.blockbreak);

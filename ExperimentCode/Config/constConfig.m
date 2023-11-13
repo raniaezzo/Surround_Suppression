@@ -124,9 +124,9 @@ end
 % add a solid circle to mask for surround gap
 const.gapRadius_px = round(const.stimRadiuspix+(const.gapWidth));
 
-gap = ones(const.visiblesize_surr, const.visiblesize_surr).*0.5;
+gap = ones(const.visiblesize_surr, const.visiblesize_surr).*const.gray;
 gap(:,:,2) = createGap(gap, const.stimRadiuspix, const.gapRadius_px, const.stimCosEdge_pix); %const.surroundwavetex
-size(gap)
+size(gap)  
 disp(const.stimRadiuspix)
 disp(const.gapRadius_px)
 const.gapTexture=Screen('MakeTexture', const.window, gap);

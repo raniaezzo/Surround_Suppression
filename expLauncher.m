@@ -11,7 +11,7 @@ Screen('Preference', 'TextRenderer', 0);
 %PsychDebugWindowConfiguration(0, 0.3);
 % Initialization
 warning('off');        % do not print warnings
-const.DEBUG = 1;       % skips subject details / data saving
+const.DEBUG = 0;       % skips subject details / data saving
 const.miniWindow = 0;  % for debugging purposes only
 const.makemovie =0;   % capture movie of trial (slows down performance)
 const.scale2screen = 0;
