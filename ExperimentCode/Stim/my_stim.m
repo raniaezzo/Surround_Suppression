@@ -1,5 +1,7 @@
 function [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, trialID, vbl)
 
+disp('My stim')
+
 iL = const.phaseLine(1,trialID);
 iR = const.phaseLine(2,trialID);
 

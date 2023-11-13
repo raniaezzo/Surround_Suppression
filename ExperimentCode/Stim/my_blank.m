@@ -1,9 +1,12 @@
-function [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, vbl)
+function [expDes, const, frameCounter, vbl] = my_blank(my_key, scr, const, expDes, frameCounter, trialID, vbl)
 
 try
     waitframes = 1;
     %vbl = Screen('Flip',const.window);
-    vblendtime = vbl + expDes.itiDur_s;
+    vblendtime = vbl + expDes.variableITI_s(trialID); %expDes.itiDur_s;
+    disp('My blank') 
+    expDes.variableITI_s(trialID)
+    disp('~~~')
     % Blank period
     while vbl <= vblendtime  
         if ~const.expStop

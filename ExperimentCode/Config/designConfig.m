@@ -68,11 +68,20 @@ end
 %% Experiental timing settings
 
 expDes.stimDur_s  = 0.5;   % 0.5 sec stimulus duration % based on Hermes et al., 2014
-expDes.itiDur_s  = 2;      % 2 inter-trial interval (fixation)
-expDes.exp_dur = (expDes.nb_trials*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
+
+% 2 inter-trial interval (fixation)
+lowerBoundITI = .5; % 0.5 s
+upperBoundITI = .9; % .9 s
+
+% uniformly distributed array of ITIs (length = nTrials)
+expDes.variableITI_s = lowerBoundITI + (upperBoundITI - lowerBoundITI) * rand(expDes.nb_trials, 1);
+expDes.variableITI_s = round(expDes.variableITI_s, 3); % round to the nearest milisecond
+
+expDes.exp_dur = (expDes.nb_trials*expDes.stimDur_s) + sum(expDes.variableITI_s); % in seconds
 expDes.NumBlocks = 5;
 expDes.ApprxTrialperBlock = round(expDes.nb_trials/expDes.NumBlocks);
-expDes.block_dur = (expDes.ApprxTrialperBlock*(expDes.stimDur_s+expDes.itiDur_s)); % in seconds
+
+expDes.block_dur = expDes.exp_dur/expDes.NumBlocks; % in seconds
 
 %% Saving procedure
 
