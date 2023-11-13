@@ -5,10 +5,11 @@ Steps before running this experiment:
 (1) Install any dependencies (see below).
 
 (2) Set the experimental parameters:
+Measure the distance between the observers eye and the monitor - you will need to include this in the parameters.tsv file.
 Change values as needed in the parameters.tsv file in the main directory (Surround Suppression).
 The parameters.json file is a dictionary will all of the variables defined for the tsv.
 
-(3) Add the gamma.mat table from the calibration procedure to the Config folder inside the main directory for accurate contrast settings (otherwise code will not run if debug is off).
+(3) If testing on a new computer/monitor, calibrate the new monitor. Add the gamma.mat table from the calibration procedure to the Config folder inside the main directory for accurate contrast settings. The current gamma table is linked to your computer -- the default is an example gamma file, so if testing on a new computer please add this condition to scrConfig.m.
 
 ~~~~~~~~~~~~~~~~~~
 
