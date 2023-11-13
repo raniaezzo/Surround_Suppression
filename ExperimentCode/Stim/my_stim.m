@@ -134,6 +134,8 @@ while ~(const.expStop) && ~(responded)
                 const.expStop=1;
             elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
                 expDes.letterResponse(frameCounter) = 1; % log from the start of experiment (for letter detection)
+                responseTime = vbl-startTime;
+                responded = 1;
             elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
                 adjustedContrast = adjustedContrast+0.01;
                 reset = 0;

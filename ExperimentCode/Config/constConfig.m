@@ -151,7 +151,7 @@ theta = deg2rad(expDes.locations); % Convert angle to radians
 rho = repmat(const.stimEccpix, 1, length(theta));
 
 xPos = rho .* cos(theta);
-yPos = rho .* sin(theta);
+yPos = rho .* -sin(theta);
 
 for li=1:length(xPos)
     const.rectPoints{li} = create_dstRect(const.visiblesize, xPos(li), yPos(li), scr.windCenter_px);

@@ -65,9 +65,13 @@ else % otherwise
     end
     
     % compute the symmetric value relative to the vertical meridian
-    if const.paLocTarget(1) < 180
+    if const.paLocTarget(1) == 90
+        addedTargetLoc = 270;
+    elseif const.paLocTarget(1) == 270
+        addedTargetLoc = 90;
+    elseif const.paLocTarget(1) < 180
         addedTargetLoc = 90 + (90 - const.paLocTarget(1));
-    elseif const.paLocTarget >= 180
+    elseif const.paLocTarget(1) >= 180
         addedTargetLoc = 270 + (270 - const.paLocTarget(1));
         if addedTargetLoc >= 360 % make sure a 360 value is interpretted as 0
             addedTargetLoc = addedTargetLoc - 360;
@@ -95,8 +99,9 @@ else % otherwise
      % log all existing values in each hemifield (LHemi, RHemi)
     rh_PA = const.paLocs(const.paLocs < 90 | const.paLocs > 270);
     lh_PA = const.paLocs(const.paLocs > 90 & const.paLocs < 270);
+    vert_PA = const.paLocs(const.paLocs == 90);
     
-    if isempty(lh_PA) || isempty(rh_PA)
+    if (isempty(lh_PA) || isempty(rh_PA)) && isempty(vert_PA)
         error('Invalid range of polar angle locations (stimPaLocs. Must be > 0 and < 360.')
     end  
     
