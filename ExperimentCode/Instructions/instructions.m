@@ -47,7 +47,7 @@ while ~push_button
     % wait for trigger with keyboard (keep with VPIXX for ability to quit)
     [ keyIsDown, ~, keyCode ] = KbCheck(my_key.keyboardID); % KbCheck(-1);
     if keyIsDown
-        if keyCode(my_key.space)
+        if keyCode(my_key.enter)
             disp('STARTED EXPERIMENT ...')
             push_button=1;
         elseif keyCode(my_key.escape) && ~const.expStart

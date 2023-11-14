@@ -133,6 +133,7 @@ const.surroundContrast = arrayfun(@(x) str2double(surroundContrasts{x}),1:length
 
 % find screen details
 if ~computerDetails.windows
+    scr.OS = 'macOS';
     switch computerDetails.localHostName
         case 'Ranias-MacBook-Pro-2'
             scr.experimenter = 'RE';
@@ -145,6 +146,7 @@ if ~computerDetails.windows
             scr.experimenter = 'Unknown';
     end
 else    % PC (field names are different)
+    scr.OS = 'PC';
     switch computerDetails.system
         case 'NT-11.0.9200 - '
             scr.experimenter = 'StanfordPC';

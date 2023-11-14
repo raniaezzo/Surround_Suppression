@@ -44,7 +44,7 @@ end
 if const.expStart; ListenChar(2);end
 [expDes, const] = runTrials(scr,const,expDes,my_key,textExp);
 
-if ~const.expStop && strcmp(const.expPar, 'behavioral'); quickplot(const, expDes); end
+if ~const.expStop; quickplot(const, expDes, scr); end
 
 overDone(const, expDes);
 

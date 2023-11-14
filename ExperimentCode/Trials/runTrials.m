@@ -19,7 +19,7 @@ function [expDes, const] = runTrials(scr,const,expDes,my_key,textExp)
 
 %% General instructions:
 
-if const.DEBUG
+if ~const.DEBUG
     HideCursor(scr.scr_num);
 end
 
@@ -61,7 +61,7 @@ for ni=1:expDes.nb_trials
 
     % for breaks
     if mod(ni,expDes.ApprxTrialperBlock)==0 && ni ~= 0 && ni ~= expDes.nb_trials && ~const.expStop
-        blockbreak = sprintf(' Completed %s/%s blocks. Press [space] to continue. ',num2str(blockTracker), num2str(expDes.NumBlocks));
+        blockbreak = sprintf(' Completed %s/%s blocks. Press [enter] to continue. ',num2str(blockTracker), num2str(expDes.NumBlocks));
         textExp.blockbreak = {blockbreak};
         keyCode = instructions(scr,const,my_key,textExp.blockbreak);
         if keyCode(my_key.escape), return, end
@@ -78,8 +78,11 @@ for ni=1:expDes.nb_trials
 
         expDes.stimulus_onsets(ni) = vbl-t0; % log the onset of each stimulus
         [expDes, const, frameCounter, vbl] = my_stim(my_key, scr, const, expDes, frameCounter, ni, vbl);
+        
     end
 end
+
+expDes.frameCounterEnd = frameCounter;
 
 Screen('Flip',const.window);
 

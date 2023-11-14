@@ -14,7 +14,7 @@ function [textExp] = instructionConfig
 
 %% Main instruction :
 
-instruction = '-----------------  Ready to start? [space]  -----------------';
+instruction = '-----------------  Ready to start? [enter]  -----------------';
 
 textExp.instruction= {instruction};
 

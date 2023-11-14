@@ -33,13 +33,6 @@ frameCounter_init = frameCounter;
 while ~(const.expStop) && ~(responded)
     
     if ~const.expStop
-        
-        % for letter detection
-        if const.letter_seq(frameCounter) == 1
-            trialLetterString = const.target_letter;
-        else
-            trialLetterString = const.pedestal_letter;
-        end
 
         if mod((frameCounter-frameCounter_init), flicker_time*(scr.frameRate)) == 0
             phasenow = phasenow*flipphase;
@@ -107,6 +100,12 @@ while ~(const.expStop) && ~(responded)
         
         % Draw stimuli here, better at the start of the drawing loop
         if strcmp(const.expPar, 'neural')
+            % for letter detection
+            if const.letter_seq(frameCounter) == 1
+                trialLetterString = const.target_letter;
+            else
+                trialLetterString = const.pedestal_letter;
+            end
             my_letter_detection_task(scr, const, const.white, trialLetterString)
         end
 
@@ -135,7 +134,6 @@ while ~(const.expStop) && ~(responded)
                 const.forceQuit=1;
                 const.expStop=1;
             elseif keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.space)
-                expDes.letterResponse(frameCounter) = 1; % log from the start of experiment (for letter detection)
                 responseTime = vbl-startTime;
                 responded = 1;
             elseif (keyIsDown && ~keyCode(my_key.escape) && keyCode(my_key.rightArrow)) && reset
@@ -161,6 +159,16 @@ while ~(const.expStop) && ~(responded)
 
         % FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
+        
+        % NO LONGER NEED BELOW BECAUSE I MOVED THE CONST.LETTER_SEQ INTO
+        % THE FOR LOOP ABOVE
+%         % for behavioral condition (with unlimited response time), extend
+%         % the framerate array 
+%         if length(const.letter_seq) <= frameCounter
+%             const.letter_seq = [const.letter_seq; const.letter_seq];
+%             expDes.letterResponse = [expDes.letterResponse; zeros(length(expDes.letterResponse),1)];
+%         end
+        
     else
         break
     end

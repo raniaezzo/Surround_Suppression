@@ -26,6 +26,13 @@ end
 my_key.escape       = KbName('ESCAPE');
 my_key.space        = KbName('Space');
 
+enter_keyCodes      = KbName('Return');
+if strcmp(scr.OS, 'PC') && length(enter_keyCodes) > 1
+    my_key.enter        = enter_keyCodes(2); % check that works with PC
+else
+    my_key.enter        = enter_keyCodes(1); % for mac
+end
+
 if strcmp(scr.experimenter, 'StanfordPC')
     my_key.rightArrow   = KbName('Right'); % check with them what occurs with code below and create more general solution
     my_key.leftArrow    = KbName('Left');
