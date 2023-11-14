@@ -112,7 +112,6 @@ while ~(const.expStop) && ~(responded)
         Screen('DrawingFinished',const.window); % small ptb optimisation
         vbl = Screen('Flip',const.window, vbl + (waitframes - 0.5) * scr.ifi);
         
-        
         % check for keyboard input
         [keyIsDown, ~, keyCode] = KbCheck(my_key.keyboardID);
         if keyIsDown && keyCode(my_key.escape)
@@ -159,15 +158,6 @@ while ~(const.expStop) && ~(responded)
 
         % FlushEvents('KeyDown');
         frameCounter=frameCounter+1;
-        
-        % NO LONGER NEED BELOW BECAUSE I MOVED THE CONST.LETTER_SEQ INTO
-        % THE FOR LOOP ABOVE
-%         % for behavioral condition (with unlimited response time), extend
-%         % the framerate array 
-%         if length(const.letter_seq) <= frameCounter
-%             const.letter_seq = [const.letter_seq; const.letter_seq];
-%             expDes.letterResponse = [expDes.letterResponse; zeros(length(expDes.letterResponse),1)];
-%         end
         
     else
         break
