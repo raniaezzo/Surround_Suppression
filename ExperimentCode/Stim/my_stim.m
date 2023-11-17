@@ -29,6 +29,13 @@ responseTime = NaN;
 movieframe_n = 1;
 
 frameCounter_init = frameCounter;
+
+if const.TRIGGERCHECK
+    % Add every time you want to send a trigger (TTL pulse) 
+    %  ***** RTBOX *******
+    RTBox('TTL', 255);
+end
+
 % Animationloop:
 while ~(const.expStop) && ~(responded)
     
@@ -169,6 +176,12 @@ end
 if ~ strcmp(const.expPar, 'neural')
     expDes.response(trialID, 1) = adjustedContrast;
     expDes.response(trialID, 2) = responseTime;
+end
+
+if const.TRIGGERCHECK
+    % Add every time you want to send a trigger (TTL pulse) 
+    %  ***** RTBOX *******
+    RTBox('TTL', 175);
 end
 
 end
