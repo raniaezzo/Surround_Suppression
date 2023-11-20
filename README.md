@@ -47,10 +47,14 @@ Neural Paradigm:
 
 ~~~~~~~~~~~~~~~~~~
 
-Dependencies:
+Dependencies for experimental code:
 
 MATLAB (tested with R2019a, R2020a, R2023a)
 Psychtoolbox (tested with v3)
+
+Dependencies for analysis code:
+
+MATLAB R2020b+ is needed for edfinfo()
 
 ~~~~~~~~~~~~~~~~~~
 
